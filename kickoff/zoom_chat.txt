@@ -1,0 +1,35 @@
+14:05:22	 From Bernd Flemisch : If you have not done so: login to the Discord channel https://discord.gg/8Q5fZS3T47, set your name (or nickname) to "FirstName LastName (organization)"
+14:07:05	 From Bernd Flemisch : Only the participants of the benchmark study
+14:24:31	 From Ruben Juanes : Great benchmark setup, Jan!
+14:26:46	 From andrew.wilkins@csiro.au : Why is the Flower curved?
+14:29:39	 From James Gunning : And what is the width of the cell?
+14:30:20	 From Jan Martin Nordbotten : 19mm
+14:30:38	 From Jonathan Ennis-King : How is the permeability of the sand measured? Is the sand poured in, or compacted in some fashion?
+14:30:44	 From Jan Martin Nordbotten : Up to 28mm in the middle, due to the pressure.
+14:33:33	 From Jan Martin Nordbotten : Jonathan: Will ask Martin to speak more about that.
+14:36:57	 From andrew.wilkins@csiro.au : Will we have access to all these experimental results?  (All the different perms measured.)
+14:37:38	 From andrew.wilkins@csiro.au : Thanks
+14:42:30	 From Lluis Salo Salgado : The faults look really good. I did not understand the comment that the silicone fault is sealing at one side. Does that mean that at the back (the part we dont see) the fault may not be sealing and there could be leakage accross?
+14:42:32	 From andrew.wilkins@csiro.au : Can you describe how you managed to construct this complicated lithology?  It might be important to know for the numerical simulation, but mostly I’m quite intrigued/impressed that you could construct it so precisely
+14:47:32	 From Samuel Jackson : For the repeat tank multiphase flow experiments, how do you clean/reset the rig? Do you have to empty and refill with new sand?
+14:48:48	 From James Gunning : And will there be thickness measurements in some sort of array? If it varies from 19-28mm that’s a fair bit of variation..
+14:49:04	 From Jan Martin Nordbotten : James: Yes, we have a thickness map for you.
+14:49:21	 From Jan Martin Nordbotten : 18 measurements in a grid.
+14:52:32	 From Ruben Juanes : Martin: the experimental cell is spectacular. I like your idea to make the time-lapse imagery of the sand filling available, to better visualize/understand the details of how the faults are built.
+14:55:59	 From Samuel Jackson : Thanks for the comprehensive answer. Can you also comment on 3D effects, e.g. preferential flow along the walls - do you have verification of the depth varying saturation?
+14:58:44	 From Samuel Jackson : Thanks!
+14:59:08	 From Bernd Flemisch : All international participants: please send me your github.com username. If you don't have one, please generate an account at: https://github.com/signup
+15:08:34	 From andrew.wilkins@csiro.au : The timeframe is very tight for me.  During the next 2 weeks, can you gradually feed us data, instead of sending it all on 1 October?
+15:09:00	 From Jan Martin Nordbotten : Andrew: Yes.
+15:09:25	 From Jan Martin Nordbotten : We will upload everything we have today, which should be enough to set up the first simulations.
+15:09:35	 From Martin Fernø : Yes, we will do the our best to accelerate the process of generating the missing experimental data
+15:09:59	 From andrew.wilkins@csiro.au : Thanks
+15:11:30	 From Jonathan Ennis-King : Because there is an inversion process involved (matching the provided data), I don't see that there is a 'best' simulation - there will be a space of inversion solutions that will give essentially the same results for matching the data.
+15:16:42	 From James Gunning : Jan: can you describe the flow experiments that will be “history matched”, and what that inversion you are doing will comprise?
+15:20:40	 From Jonathan Ennis-King : So since everything that goes into discord will be publicly accessible at the end of the process, we should be very careful about what we write.
+15:23:47	 From andrew.wilkins@csiro.au : Heheheh, I’m wondering if I’ve already said something stupid on the Discord !
+15:29:44	 From James Gunning : Sorry to press - but what will be the flow experiments programme  that will be “history matched”?
+15:31:16	 From James Gunning : …ie is this a set of water injections in different places?
+15:40:46	 From Samuel Jackson : A very exciting project, thank you all for your efforts so far!
+15:40:49	 From andrew.wilkins@csiro.au : Thank you - this is going to be fun!
+15:40:56	 From holger : thanks for all the efforts
