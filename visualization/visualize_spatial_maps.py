@@ -50,7 +50,7 @@ def visualizeSpatialMaps():
     baseFileName = cmdArgs["basefilename"]
 
     xSpace = np.arange(0.0, 2.87, 1.0e-2)
-    ySpace = np.arange(0.0, 1.31, 1.0e-2)
+    ySpace = np.arange(0.0, 1.24, 1.0e-2)
     x, y = np.meshgrid(xSpace, ySpace)
     nX = xSpace.size - 1
     nY = ySpace.size - 1
