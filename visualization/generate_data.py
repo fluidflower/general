@@ -25,7 +25,7 @@ def generateBenchmarkData():
     with open("arbitrary_spatial_map_24h.csv", "w") as spatialMap:
         spatialMap.write("# x, y, gas saturation [-], CO2 concentration in water [kg/m3]\n")
 
-        ySpace = np.arange(5.0e-3, 1.3e+0, 1.0e-2)
+        ySpace = np.arange(5.0e-3, 1.23e+0, 1.0e-2)
         xSpace = np.arange(5.0e-3, 2.86e+0, 1.0e-2)
 
         for y in ySpace:
