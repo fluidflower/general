@@ -14,7 +14,12 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 def getFieldValues(fileName, nX, nY):
     print(f'Processing {fileName}.') 
 
-    csvData = np.genfromtxt(fileName, delimiter=',', skip_header=1)
+    skip_header = 0
+    with open(fileName, "r") as file:
+        if not (file.readline()[0]).isnumeric():
+            skip_header = 1
+
+    csvData = np.genfromtxt(fileName, delimiter=',', skip_header=skip_header)
     saturation = np.empty([nY, nX])
     concentration = np.empty([nY, nX])
     for i in np.arange(0, nY):

@@ -26,7 +26,12 @@ def visualizeTimeSeries():
     fileName = cmdArgs["filename"]
     baseFileName = os.path.splitext(fileName)[0]
 
-    csvData = np.genfromtxt(fileName, delimiter=',', skip_header=1)
+    skip_header = 0
+    with open(fileName, "r") as file:
+        if not (file.readline()[0]).isnumeric():
+            skip_header = 1
+
+    csvData = np.genfromtxt(fileName, delimiter=',', skip_header=skip_header)
     t = csvData[:, 0]/3600
 
     fig, ax = plt.subplots()
