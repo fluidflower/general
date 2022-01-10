@@ -5,6 +5,7 @@ Script to visualize the gas saturation and CO2 concentration
 on an evenly spaced grid as required by the benchmark description
 """
 
+import os
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,7 +13,14 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
 def getFieldValues(fileName, nX, nY):
-    print(f'Processing {fileName}.') 
+    saturation = np.zeros([nY, nX])
+    concentration = np.zeros([nY, nX])
+
+    if os.path.isfile(fileName):
+        print(f'Processing {fileName}.')
+    else:
+        print(f'No file {fileName} found. Returning 0 values.')
+        return saturation, concentration
 
     skip_header = 0
     with open(fileName, "r") as file:
@@ -20,8 +28,6 @@ def getFieldValues(fileName, nX, nY):
             skip_header = 1
 
     csvData = np.genfromtxt(fileName, delimiter=',', skip_header=skip_header)
-    saturation = np.empty([nY, nX])
-    concentration = np.empty([nY, nX])
     for i in np.arange(0, nY):
         saturation[i, :] = csvData[i*nX:(i+1)*nX, 2]
         concentration[i, :] = csvData[i*nX:(i+1)*nX, 3]
