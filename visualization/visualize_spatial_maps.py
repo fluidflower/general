@@ -45,12 +45,20 @@ def visualizeSpatialMaps():
                         help="The base name of the csv files to visualize. "
                              "Assumes that the files are named 'basefilename_<X>h.csv' "
                              "with X = 24, 48, ..., 120. Defaults to 'spatial_map'.")
+    parser.add_argument("-xmin", "--xmin", type=float, default=0.0,
+                        help="The minimum x value of the domain. Defaults to 0.0.")
+    parser.add_argument("-xmax", "--xmax", type=float, default=2.86,
+                        help="The maximum x value of the domain. Defaults to 2.86.")
+    parser.add_argument("-ymin", "--ymin", type=float, default=0.0,
+                        help="The minimum y value of the domain. Defaults to 0.0.")
+    parser.add_argument("-ymax", "--ymax", type=float, default=1.23,
+                        help="The maximum y value of the domain. Defaults to 1.23.")
 
     cmdArgs = vars(parser.parse_args())
     baseFileName = cmdArgs["basefilename"]
 
-    xSpace = np.arange(0.0, 2.87, 1.0e-2)
-    ySpace = np.arange(0.0, 1.24, 1.0e-2)
+    xSpace = np.arange(cmdArgs["xmin"], cmdArgs["xmax"] + 5.0e-3, 1.0e-2)
+    ySpace = np.arange(cmdArgs["ymin"], cmdArgs["ymax"] + 5.0e-3, 1.0e-2)
     x, y = np.meshgrid(xSpace, ySpace)
     nX = xSpace.size - 1
     nY = ySpace.size - 1
