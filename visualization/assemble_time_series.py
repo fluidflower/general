@@ -44,60 +44,42 @@ def assembleTimeSeries():
         csvData = np.genfromtxt(fileName, delimiter=delimiter, skip_header=skip_header)
         t = csvData[:, 0]/3600
 
-        if group != "Delft":
-            axsP[0].plot(t, csvData[:, 1], label=group)
-        else:
-            axsP[0].plot(t, 1e5*csvData[:, 1], label=group)
+        axsP[0].plot(t, csvData[:, 1], label=group)
         axsP[0].set_title('sensor 1')
         axsP[0].set_xlabel('time [h]')
         axsP[0].set_ylabel('pressure [N/m2]')
         axsP[0].set_ylim(0.9e5, 1.3e5)
         axsP[0].set_xlim(-1.0, 125.0)
 
-        if group != "Delft":
-            axsP[1].plot(t, csvData[:, 2], label=group)
-        else:
-            axsP[1].plot(t, 1e5*csvData[:, 2], label=group)
+        axsP[1].plot(t, csvData[:, 2], label=group)
         axsP[1].set_title('sensor 2')
         axsP[1].set_xlabel('time [h]')
         axsP[1].set_ylim(0.9e5, 1.3e5)
         axsP[1].set_xlim(-1.0, 125.0)
         axsP[1].legend()
 
-        if group != "Delft":
-            axsPZ[0].plot(t, csvData[:, 1], label=group)
-        else:
-            axsPZ[0].plot(t, 1e5*csvData[:, 1], label=group)
+        axsPZ[0].plot(t, csvData[:, 1], label=group)
         axsPZ[0].set_title('sensor 1')
         axsPZ[0].set_xlabel('time [h]')
         axsPZ[0].set_ylabel('pressure [N/m2]')
         axsPZ[0].set_ylim(1.09e5, 1.115e5)
         axsPZ[0].set_xlim(-1.0, 125.0)
 
-        if group != "Delft":
-            axsPZ[1].plot(t, csvData[:, 2], label=group)
-        else:
-            axsPZ[1].plot(t, 1e5*csvData[:, 2], label=group)
+        axsPZ[1].plot(t, csvData[:, 2], label=group)
         axsPZ[1].set_title('sensor 2')
         axsPZ[1].set_xlabel('time [h]')
         axsPZ[1].set_ylim(1.035e5, 1.055e5)
         axsPZ[1].set_xlim(-1.0, 125.0)
         axsPZ[1].legend()
 
-        if group != "Delft":
-            axsPT[0].plot(t, csvData[:, 1], label=group)
-        else:
-            axsPT[0].plot(t, 1e5*csvData[:, 1], label=group)
+        axsPT[0].plot(t, csvData[:, 1], label=group)
         axsPT[0].set_title('sensor 1')
         axsPT[0].set_xlabel('time [h]')
         axsPT[0].set_ylabel('pressure [N/m2]')
         axsPT[0].set_xlim(-0.1, 10.0)
         axsPT[0].set_ylim(1.0e5, 1.2e5)
 
-        if group != "Delft":
-            axsPT[1].plot(t, csvData[:, 2], label=group)
-        else:
-            axsPT[1].plot(t, 1e5*csvData[:, 2], label=group)
+        axsPT[1].plot(t, csvData[:, 2], label=group)
         axsPT[1].set_title('sensor 2')
         axsPT[1].set_xlabel('time [h]')
         axsPT[1].set_xlim(-0.1, 10.0)

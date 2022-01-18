@@ -74,10 +74,7 @@ def assembleSparseData():
 
         csvData = np.genfromtxt(fileName, delimiter=delimiter, skip_header=skip_header, skip_footer=skip_footer)
 
-        if group == "Delft":
-            visualizeRow(1e5*csvData[0], axsP[0], '1a: sensor 1', 'pressure [N/m2]', group, color, offset)
-            visualizeRow(1e5*csvData[1], axsP[1], '1b: sensor 2', 'pressure [N/m2]', group, color, offset)
-        elif group != "Herriot-Watt":
+        if group != "Herriot-Watt":
             visualizeRow(csvData[0], axsP[0], '1a: sensor 1', 'pressure [N/m2]', group, color, offset)
             visualizeRow(csvData[1], axsP[1], '1b: sensor 2', 'pressure [N/m2]', group, color, offset)
 
