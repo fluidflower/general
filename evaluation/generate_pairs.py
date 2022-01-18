@@ -1,25 +1,22 @@
 #!/usr/bin/env python3
-
 import random
 
 def generatePairs():
-
     pairCandidates = {
+        "Mojdeh Delshad": "Austin",
         "Mohamad Jammoul": "Austin",
         "Mary Wheeler": "Austin",
         "Chris Green": "CSIRO",
-        "James Gunning": "CSIRO",
         "Samuel Jackson": "CSIRO",
-        "Andrew Wilkins": "CSIRO",
-        "Dennis Voskov": "Delft",
+        "Denis Voskov": "Delft",
         "Michiel Wapperom": "Delft",
-        "Florian Doster": "Herriot-Watt",
         "Sebastian Geiger": "Herriot-Watt",
         "Satish Karra": "LANL",
         "Hari Viswanathan": "LANL",
         "Jacques Franc": "Stanford",
         "Holger Class": "Stuttgart",
         "Dennis Gläser": "Stuttgart",
+        "Stephan Matthai": "Melbourne",
     }
 
     observerCandidates = {
@@ -28,8 +25,9 @@ def generatePairs():
         "Carl Jacquemyn": "Imperial",
         "Geraldine Regnier": "Imperial",
         "Pablo Salinas": "Imperial",
+        "Qi Shao": "Melbourne",
+        "Luat Khoa Tran": "Melbourne",
         "Youssef AbdAllah": "Melbourne",
-        "Stephan Matthai": "Melbourne",
     }
 
     finished = False
@@ -43,6 +41,9 @@ def generatePairs():
 
         if observerCandidates:
             observer, group = random.choice(list(observerCandidates.items()))
+
+        if group == group1 or group == group2:
+            continue
 
         print(f'Pair {idx}: {person1} ({group1}) and {person2} ({group2}), Observer: {observer} ({group})')
         idx += 1
