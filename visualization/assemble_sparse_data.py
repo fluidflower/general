@@ -28,7 +28,8 @@ def visualizeRow(row, ax, title, ylabel, group, color, offset):
     else:
         p90_dev = row[5]
 
-    rect = mpatches.Rectangle((1+offset, p10_mean), 1, p90_mean - p10_mean, color=color, label=group)
+    # rect = mpatches.Rectangle((1+offset, p10_mean), 1, p90_mean - p10_mean, color=color, label=group)
+    rect = mpatches.Polygon([[1+offset, p10_mean], [2+offset, p50_mean], [1+offset, p90_mean]], fill=True, color=color, label=group)
     ax.add_patch(rect)
 
     ax.arrow(2.1+offset, p50_mean, 0, p10_dev, length_includes_head=True,
