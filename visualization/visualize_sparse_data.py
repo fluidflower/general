@@ -13,6 +13,9 @@ import matplotlib.patches as mpatches
 import math
 
 def visualizeRow(row, ax, title, ylabel):
+    if not np.isfinite(row[2]):
+        return
+
     if np.isfinite(row[1]):
         p10_mean = row[1]
     else:
@@ -23,6 +26,9 @@ def visualizeRow(row, ax, title, ylabel):
     else:
         p90_mean = row[2]
 
+
+    if not np.isfinite(row[5]):
+        row[5] = 0.0
 
     if np.isfinite(row[4]):
         p10_dev = row[4]
@@ -58,8 +64,18 @@ def visualizeRow(row, ax, title, ylabel):
     ax.set_title(title)
     ax.set_ylabel(ylabel)
     ax.set_xticks([])
-    ax.set_yticks([p10_mean, p50_mean, p90_mean])
-    ax.set_yticklabels([f'p10_mean\n={p10_mean:.3e}', f'p50_mean\n={p50_mean:.3e}', f'p90_mean\n={p90_mean:.3e}'])
+    if p10_mean == p50_mean and p90_mean == p50_mean:
+        ax.set_yticks([p50_mean])
+        ax.set_yticklabels([f'p50_mean\n={p50_mean:.3e}'])
+    elif p10_mean == p50_mean:
+        ax.set_yticks([p50_mean, p90_mean])
+        ax.set_yticklabels([f'p50_mean\n={p50_mean:.3e}', f'p90_mean\n={p90_mean:.3e}'])
+    elif p90_mean == p50_mean:
+        ax.set_yticks([p10_mean, p50_mean])
+        ax.set_yticklabels([f'p10_mean\n={p10_mean:.3e}', f'p50_mean\n={p50_mean:.3e}'])
+    else:
+        ax.set_yticks([p10_mean, p50_mean, p90_mean])
+        ax.set_yticklabels([f'p10_mean\n={p10_mean:.3e}', f'p50_mean\n={p50_mean:.3e}', f'p90_mean\n={p90_mean:.3e}'])
     ax.legend()
 
 def visualizeSparseData():
