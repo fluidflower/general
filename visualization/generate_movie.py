@@ -114,6 +114,7 @@ def generateMovie():
 
     animS = animation.FuncAnimation(figS, animateS, init_func=initS,
                                    frames=np.arange(len(csvFiles)), interval=10, repeat=False)
+    print(f'{groupName.lower()}')
     animS.save(f'{groupName.lower()}_saturation.mp4', fps=15, extra_args=['-vcodec', 'libx264'])
 
     def initC():

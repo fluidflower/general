@@ -7,12 +7,26 @@ import matplotlib.patches as mpatches
 import math
 
 def visualizeRow(row, ax, title, ylabel, group, color, offset):
-    p10_mean = row[1]
+    if np.isfinite(row[1]):
+        p10_mean = row[1]
+    else:
+        p10_mean = row[2]
     p50_mean = row[2]
-    p90_mean = row[3]
-    p10_dev = row[4]
+    if np.isfinite(row[3]):
+        p90_mean = row[3]
+    else:
+        p90_mean = row[2]
+
+
+    if np.isfinite(row[4]):
+        p10_dev = row[4]
+    else:
+        p10_dev = row[5]
     p50_dev = row[5]
-    p90_dev = row[6]
+    if np.isfinite(row[6]):
+        p90_dev = row[6]
+    else:
+        p90_dev = row[5]
 
     rect = mpatches.Rectangle((1+offset, p10_mean), 1, p90_mean - p10_mean, color=color, label=group)
     ax.add_patch(rect)
@@ -33,7 +47,7 @@ def visualizeRow(row, ax, title, ylabel, group, color, offset):
     ax.set_title(title)
     ax.set_ylabel(ylabel)
     ax.set_xticks([])
-    ax.legend()
+    ax.set_xlim(1, 21)
 
 def assembleSparseData():
     """Visualize sparse data for the FluidFlower benchmark"""
@@ -45,12 +59,16 @@ def assembleSparseData():
 
     fileNames = ["../../austin/sparse_data.csv",
                  "../../csiro/sparse_data.csv",
-                 "../../delft/sparse_data.csv",
-                 "../../herriot-watt/sparse_data_HW.csv",
+                 "../../delft/delft-DARSim/sparse_data.csv",
+                 "../../delft/delft-DARTS/sparse_data.csv",
+                 "../../herriot-watt/HWU-sparsedata-final.csv",
+                 "../../imperial/sparse_data.csv",
                  "../../lanl/sparse_data.csv",
-                 "../../melbourne/sparse_data.csv"]
-    groups = ["Austin", "CSIRO", "Delft", "Herriot-Watt", "LANL", "Melbourne"]
-    colors = ["C0", "C1", "C2", "C3", "C4", "C5"]
+                 "../../melbourne/sparse_data.csv",
+                 "../../stanford/sparse_data.csv",
+                 "../../stuttgart/sparse_data.csv"]
+    groups = ["Austin", "CSIRO", "Delft-DARSim", "Delft-DARTS", "Heriot-Watt", "Imperial", "LANL", "Melbourne", "Stanford", "Stuttgart"]
+    colors = ["C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9"]
 
     figP, axsP = plt.subplots(2, 1, figsize=(12, 8))
     figT, axsT = plt.subplots(2, 1, figsize=(12, 8))
@@ -68,57 +86,44 @@ def assembleSparseData():
 
         delimiter = ','
         skip_footer = 0
-        if group == 'Melbourne':
-            delimiter = '\t'
-            skip_footer = 7
 
         csvData = np.genfromtxt(fileName, delimiter=delimiter, skip_header=skip_header, skip_footer=skip_footer)
-
-        if group != "Herriot-Watt":
-            visualizeRow(csvData[0], axsP[0], '1a: sensor 1', 'pressure [N/m2]', group, color, offset)
-            visualizeRow(csvData[1], axsP[1], '1b: sensor 2', 'pressure [N/m2]', group, color, offset)
+        visualizeRow(csvData[0], axsP[0], '1a: sensor 1', 'pressure [N/m2]', group, color, offset)
+        visualizeRow(csvData[1], axsP[1], '1b: sensor 2', 'pressure [N/m2]', group, color, offset)
 
         visualizeRow(csvData[2], axsT[0], '2: max mobile free phase in Box A', 'time [s]', group, color, offset)
-        # axsT[0].set_ylim(0.0, 1e6)
-        axsT[0].set_yscale('log')
+        axsT[0].set_ylim(1e4, 2.2e4)
+        # axsT[0].set_yscale('log')
 
-        if group != "Melbourne":
-            visualizeRow(csvData[3], axsA[0, 0], '3a: mobile free phase', 'mass [kg]', group, color, offset)
-            visualizeRow(csvData[4], axsA[0, 1], '3b: immobile free phase', 'mass [kg]', group, color, offset)
-            visualizeRow(csvData[5], axsA[1, 0], '3c: dissolved in water', 'mass [kg]', group, color, offset)
-            visualizeRow(csvData[6], axsA[1, 1], '3d: seal', 'mass [kg]', group, color, offset)
-            visualizeRow(csvData[7], axsB[0, 0], '4a: mobile free phase', 'mass [kg]', group, color, offset)
-            visualizeRow(csvData[8], axsB[0, 1], '4b: immobile free phase', 'mass [kg]', group, color, offset)
-            visualizeRow(csvData[9], axsB[1, 0], '4c: dissolved in water', 'mass [kg]', group, color, offset)
-            visualizeRow(csvData[10], axsB[1, 1], '4d: seal', 'mass [kg]', group, color, offset)
-            visualizeRow(csvData[11], axsT[1], '5: M exceeds 110% of Box C’s width', 'time [s]', group, color, offset)
-        axsT[1].set_ylim(1e4, 1e8)
+        visualizeRow(csvData[3], axsA[0, 0], '3a: mobile free phase', 'mass [kg]', group, color, offset)
+        visualizeRow(csvData[4], axsA[0, 1], '3b: immobile free phase', 'mass [kg]', group, color, offset)
+        visualizeRow(csvData[5], axsA[1, 0], '3c: dissolved in water', 'mass [kg]', group, color, offset)
+        visualizeRow(csvData[6], axsA[1, 1], '3d: seal', 'mass [kg]', group, color, offset)
+        visualizeRow(csvData[7], axsB[0, 0], '4a: mobile free phase', 'mass [kg]', group, color, offset)
+        visualizeRow(csvData[8], axsB[0, 1], '4b: immobile free phase', 'mass [kg]', group, color, offset)
+        visualizeRow(csvData[9], axsB[1, 0], '4c: dissolved in water', 'mass [kg]', group, color, offset)
+        visualizeRow(csvData[10], axsB[1, 1], '4d: seal', 'mass [kg]', group, color, offset)
+        visualizeRow(csvData[11], axsT[1], '5: M exceeds 110% of Box C’s width', 'time [s]', group, color, offset)
+        axsT[1].set_ylim(5e3, 2e5)
         axsT[1].set_yscale('log')
 
         offset = offset + 2.0
 
-    # fig = plt.figure(figsize=(8, 4))
-    # ax = plt.subplot(121)
-    # visualizeRow(csvData[2], ax, '2: max mobile free phase in Box A', 'time [s]')
-    # ax = plt.subplot(122)
-    # visualizeRow(csvData[11], ax, '5: M exceeds 110% of Box C’s width', '')
-    # fig.tight_layout()
-    # fig.savefig(f'{baseFileName}_time.png', bbox_inches='tight')
+    axsA[0][0].set_ylim(0.0, 3e-3)
+    axsA[0][1].set_ylim(0.0, 5e-3)
+    axsA[1][0].set_ylim(0.0, 5e-3)
+    axsA[1][1].set_ylim(0.0, 1e-3)
+    axsB[0][0].set_ylim(0.0, 3e-4)
+    axsB[0][1].set_ylim(0.0, 4e-5)
+    axsB[1][0].set_ylim(0.0, 2.2e-3)
+    axsB[1][1].set_ylim(0.0, 6e-4)
+    axsP[0].set_ylim(1.09e5, 1.14e5)
+    axsP[1].set_ylim(1.035e5, 1.065e5)
+    axsP[1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    axsT[1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    axsA[1][1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    axsB[1][1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
-    # fig, ax = plt.subplots(figsize=(4, 4))
-    # visualizeRow(csvData[12], ax, '6: total mass of CO2 in the top seal facies', 'mass [kg]')
-    # fig.tight_layout()
-    # fig.savefig(f'{baseFileName}_mass.png', bbox_inches='tight')
-
-    #     if group != "Delft":
-    #         axsP[0].plot(t, csvData[:, 1], label=group)
-    #     else:
-    #         axsP[0].plot(t, 1e5*csvData[:, 1], label=group)
-    #     axsP[0].set_title('sensor 1')
-    #     axsP[0].set_xlabel('time [h]')
-    #     axsP[0].set_ylabel('pressure [N/m2]')
-    #     axsP[0].set_ylim(0.9e5, 1.3e5)
-    #     axsP[0].set_xlim(-1.0, 125.0)
 
     figP.tight_layout()
     figP.savefig('sparse_data_pressure.png', bbox_inches='tight')

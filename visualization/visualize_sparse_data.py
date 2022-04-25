@@ -13,12 +13,26 @@ import matplotlib.patches as mpatches
 import math
 
 def visualizeRow(row, ax, title, ylabel):
-    p10_mean = row[1]
+    if np.isfinite(row[1]):
+        p10_mean = row[1]
+    else:
+        p10_mean = row[2]
     p50_mean = row[2]
-    p90_mean = row[3]
-    p10_dev = row[4]
+    if np.isfinite(row[3]):
+        p90_mean = row[3]
+    else:
+        p90_mean = row[2]
+
+
+    if np.isfinite(row[4]):
+        p10_dev = row[4]
+    else:
+        p10_dev = row[5]
     p50_dev = row[5]
-    p90_dev = row[6]
+    if np.isfinite(row[6]):
+        p90_dev = row[6]
+    else:
+        p90_dev = row[5]
 
     rect = mpatches.Rectangle((1, p10_mean), 1, p90_mean - p10_mean, color = "purple")
     ax.add_patch(rect)

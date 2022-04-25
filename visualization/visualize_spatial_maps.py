@@ -36,7 +36,12 @@ def getFieldValues(fileName, nX, nY):
 
 def plotColorMesh(fig, x, y, z, timestep, name):
     ax = fig.add_subplot(230+timestep)
-    im = ax.pcolormesh(x, y, z, shading='flat', cmap='coolwarm')
+    vmin = 0.0
+    if name == 'saturation':
+        vmax = 1.0
+    else:
+        vmax = 1.8
+    im = ax.pcolormesh(x, y, z, shading='flat', cmap='coolwarm', vmin=vmin, vmax=vmax)
     ax.axis([x.min(), x.max(), y.min(), y.max()])
     ax.axis('scaled')
     ax.set_title(f'{name} at t = {timestep*24} h')
