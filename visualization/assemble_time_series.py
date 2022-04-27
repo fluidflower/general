@@ -2,6 +2,7 @@
 import os
 import argparse
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 
 def assembleTimeSeries():
@@ -23,6 +24,11 @@ def assembleTimeSeries():
                  "../../stanford/time_series_final.csv",
                  "../../stuttgart/time_series.csv"]
     groups = ["Austin", "CSIRO", "Delft-DARSim", "Delft-DARTS", "Heriot-Watt", "Imperial", "LANL", "Melbourne", "Stanford", "Stuttgart"]
+
+    font = {'family' : 'normal',
+            'weight' : 'normal',
+            'size' : 16}
+    matplotlib.rc('font', **font)
 
     figP, axsP = plt.subplots(1, 2, figsize=(12, 4))
     figPT, axsPT = plt.subplots(1, 2, figsize=(12, 4))
@@ -134,6 +140,7 @@ def assembleTimeSeries():
         axsT.set_xlabel('time [min]')
         axsT.set_ylabel('mass [g]')
         axsT.set_xlim(-1.0, 7260.0)
+        axsT.set_ylim(-0.01, 10.0)
         axsT.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
     figP.savefig('time_series_pressure.png', bbox_inches='tight')
