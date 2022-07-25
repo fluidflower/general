@@ -1,44 +1,40 @@
 import cv2
 import numpy as np
 from matplotlib import pyplot as plt
-  
-path = r'../../stuttgart/figures/stuttgart_gray_24h.png'
+from scipy.stats import wasserstein_distance
 
-img = cv2.imread(path)
-hst = cv2.calcHist(img, [0], None, [256], [0,256])
-print(hst)
-cv2.imshow('image', img)
+groups = ['Austin', 'CSIRO', 'Delft-DARSim', 'Delft-DARTS',
+          'Heriot-Watt', 'LANL', 'Melbourne', 'MIT', 'Stanford', 'Stuttgart']
+paths = ['../../austin/figures/austin_gray_',
+         '../../csiro/figures/csiro_gray_',
+         '../../delft/delft-DARSim/figures/delft_darsim_gray_',
+         '../../delft/delft-DARTS/figures/delft_darts_gray_',
+         '../../herriot-watt/figures/heriot_watt_gray_',
+         '../../lanl/figures/lanl_gray_',
+         '../../melbourne/Figures/melbourne_gray_',
+         '../../mit/figures/mit_gray_',
+         '../../stanford/figures/stanford_gray_',
+         '../../stuttgart/figures/stuttgart_gray_']
+hst = {}
 
-#plt.plot(hst)
-#plt.title('Histogram for gray scale image')
-#plt.show()
+for path, group in zip(paths, groups):
+    img = cv2.imread(f'{path}24h.png', cv2.IMREAD_GRAYSCALE)
+    hst[group] = cv2.calcHist([img], [0], None, [256], [0,256])
+    hst[group] = np.array(np.concatenate(hst[group]).flat)/(572*246)
+    print(hst[group])
 
-# import numpy as np
-# import skimage.color
-# import skimage.io
-# import matplotlib.pyplot as plt
+    plt.plot(hst[group], label=group)
 
-# # read the image of a plant seedling as grayscale from the outset
-# image = skimage.io.imread(fname="../../experiment/snapshots/box_A_c3_1_24h_211215_time110714_DSC04550_con_gray.jpg",
-#                           as_gray=True)
-# #image = skimage.io.imread(fname="plant-seedling.jpg", as_gray=True)
+wass_dist = np.empty([10, 10])
 
-# # display the image
-# #fig, ax = plt.subplots()
-# #plt.imshow(image, cmap="gray")
-# #plt.show()
+for i, groupI in zip(range(10), groups):
+    for j, groupJ in zip(range(10), groups):
+        wass_dist[i][j] = wasserstein_distance(hst[groupI], hst[groupJ])
 
-# # create the histogram
-# histogram, bin_edges = np.histogram(image, bins=256, range=(0, 1))
-# print(histogram)
+print(wass_dist)
 
-# # configure and draw the histogram figure
-# plt.figure()
-# plt.title("Grayscale Histogram")
-# plt.xlabel("grayscale value")
-# plt.ylabel("pixel count")
-# #plt.yscale("log")
-# plt.xlim([0.0, 1.0])  # <- named arguments do not work here
+plt.gca().set_ylim(0, 0.01)
+plt.gca().legend(loc='center left', bbox_to_anchor=(1, 0.5))
+plt.title('Histograms for gray scale image')
+plt.show()
 
-# plt.plot(bin_edges[0:-1], histogram)  # <- or here
-# plt.show()

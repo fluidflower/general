@@ -102,7 +102,10 @@ def generateGrayScale():
     elif fieldName == "con":
         plotColorMesh(fig, x, y, concentration, fieldName, outFileName)
     else:
-        plotColorMesh(fig, x, y, saturation + concentration, fieldName, outFileName)
+        # The formula approximates the mass of CO2 in a cell by adding
+        # the contributions from the gaseous and the liquid phase.
+        # The factor '2.0' is the approximate density of CO2.
+        plotColorMesh(fig, x, y, 2.0*saturation + concentration*(1.0 - saturation), fieldName, outFileName)
 
 if __name__ == "__main__":
     generateGrayScale()
