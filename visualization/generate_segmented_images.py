@@ -44,17 +44,37 @@ def generateImages(modelResult, experimentalData, outFileName):
     expImage = expImage.resize((560, 240))
     expImage.save(f'{outFileName}_exp.png')
 
-    for i in range(1, modContImage.size[0]-1):
-        for j in range(1, modContImage.size[1]-1):
+    for i in range(1, expContImage.size[0]-1):
+        for j in range(1, expContImage.size[1]-1):
             if modelResult[j, i] == 1 and any(
                 val == 0 for val in [modelResult[j-1, i], modelResult[j+1, i], modelResult[j, i-1], modelResult[j, i+1]]):
-                    expContPixels[i, j] = (255,165,0)
+                    expContPixels[i, j] = (0,255,0)
             elif modelResult[j, i] == 2 and any(
                 val < 2 for val in [modelResult[j-1, i], modelResult[j+1, i], modelResult[j, i-1], modelResult[j, i+1]]):
-                    expContPixels[i, j] = (128,0,128)
+                    expContPixels[i, j] = (255,0,0)
+            elif experimentalData[j, i] == 1:
+                expContPixels[i, j] = (138,254,190)
+            elif experimentalData[j, i] == 2:
+                expContPixels[i, j] = (249,107,107)
 
     expContImage = expContImage.resize((560, 240))
     expContImage.save(f'{outFileName}_exp_cont.png')
+
+    for i in range(1, modContImage.size[0]-1):
+        for j in range(1, modContImage.size[1]-1):
+            if experimentalData[j, i] == 1 and any(
+                val == 0 for val in [experimentalData[j-1, i], experimentalData[j+1, i], experimentalData[j, i-1], experimentalData[j, i+1]]):
+                    modContPixels[i, j] = (0,255,0)
+            elif experimentalData[j, i] == 2 and any(
+                val < 2 for val in [experimentalData[j-1, i], experimentalData[j+1, i], experimentalData[j, i-1], experimentalData[j, i+1]]):
+                    modContPixels[i, j] = (255,0,0)
+            elif modelResult[j, i] == 1:
+                modContPixels[i, j] = (138,254,190)
+            elif modelResult[j, i] == 2:
+                modContPixels[i, j] = (249,107,107)
+
+    modContImage = modContImage.resize((560, 240))
+    modContImage.save(f'{outFileName}_mod_cont.png')
 
 def generateSegmentMap(fileName, xmin, xmax, ymin, ymax, satmin, conmin):
     xSpace = np.arange(xmin, xmax + 5.0e-3, 1.0e-2)
