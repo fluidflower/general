@@ -30,13 +30,14 @@ for hours in [24, 48, 72, 96, 120]:
         else:
             hst[group] = np.zeros(256)
 
-        # plt.plot(hst[group], label=group)
+        plt.plot(hst[group], label=group)
 
     wass_dist = np.empty([numGroups, numGroups])
 
     for i, groupI in zip(range(numGroups), groups):
         for j, groupJ in zip(range(numGroups), groups):
-            wass_dist[i][j] = wasserstein_distance(hst[groupI], hst[groupJ], np.arange(256), np.arange(256))
+            wass_dist[i][j] = wasserstein_distance(hst[groupI], hst[groupJ])
+#            wass_dist[i][j] = wasserstein_distance(hst[groupI], hst[groupJ], np.arange(256), np.arange(256))
 
     print(wass_dist)
 
@@ -77,10 +78,11 @@ for hours in [24, 48, 72, 96, 120]:
                             text='{:.1e}'.format(wass_dist[i-1][j-1]),
                             font=fnt, fill='black', anchor='mm')
 
-    combinedIm.save(f'weighted_wasserstein_distances_{hours}h.png', format='png')
+    combinedIm.save(f'wasserstein_distances_{hours}h.png', format='png')
+#    combinedIm.save(f'weighted_wasserstein_distances_{hours}h.png', format='png')
 
-# plt.gca().set_ylim(0, 0.01)
-# plt.gca().legend(loc='center left', bbox_to_anchor=(1, 0.5))
-# plt.title('Histograms for gray scale image')
-# plt.show()
+    plt.gca().set_ylim(0, 0.01)
+    plt.gca().legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.title('Histograms for gray scale image')
+    plt.show()
 

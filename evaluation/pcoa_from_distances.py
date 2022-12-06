@@ -20,6 +20,7 @@ for i in range(4):
 for i in range(numGroups):
   plt.scatter(pcoa.samples['PC1'][4*numGroups+i],  pcoa.samples['PC2'][4*numGroups+i], s=96, c=colors[i], label=groups[i])
 
+plt.tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
 plt.legend()
 plt.savefig("pcoa_individual.png")
 plt.clf()
@@ -36,4 +37,5 @@ plt.scatter(pcoa.samples['PC1'],  pcoa.samples['PC2'], s=96, c=colors)
 for i in range(numGroups):
   plt.text(pcoa.samples.loc[str(i), 'PC1'],  pcoa.samples.loc[str(i), 'PC2'], groups[i])
 
+plt.tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
 plt.savefig("pcoa_accumulated.png")
