@@ -4,7 +4,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import math
+import matplotlib
 
 def visualizeRow(row, ax, title, ylabel, group, color, offset):
     if np.isfinite(row[1]):
@@ -28,27 +28,19 @@ def visualizeRow(row, ax, title, ylabel, group, color, offset):
     else:
         p90_dev = row[5]
 
-    # rect = mpatches.Rectangle((1+offset, p10_mean), 1, p90_mean - p10_mean, color=color, label=group)
-    rect = mpatches.Polygon([[1+offset, p10_mean], [2+offset, p50_mean], [1+offset, p90_mean]], fill=True, color=color, label=group)
+    rect = mpatches.Rectangle((1+offset, p10_mean), 1, p50_mean - p10_mean, color=color, label=group, fill=False)
+    ax.add_patch(rect)
+    rect = mpatches.Rectangle((1+offset, p50_mean), 1, p90_mean - p50_mean, color=color, fill=False)
     ax.add_patch(rect)
 
-    ax.arrow(2.1+offset, p50_mean, 0, p10_dev, length_includes_head=True,
-             head_width=0.05, head_length=1e-5, linewidth=2, fc='b', ec='b')
-    ax.arrow(2.1+offset, p50_mean, 0, -p10_dev, length_includes_head=True,
-             head_width=0.05, head_length=1e-5, linewidth=2, fc='b', ec='b')
-    ax.arrow(2.2+offset, p50_mean, 0, p50_dev, length_includes_head=True,
-             head_width=0.05, head_length=1e-5, linewidth=2, fc='k', ec='k')
-    ax.arrow(2.2+offset, p50_mean, 0, -p50_dev, length_includes_head=True,
-             head_width=0.05, head_length=1e-5, linewidth=2, fc='k', ec='k')
-    ax.arrow(2.3+offset, p50_mean, 0, p90_dev, length_includes_head=True,
-             head_width=0.05, head_length=1e-5, linewidth=2, fc='r', ec='r')
-    ax.arrow(2.3+offset, p50_mean, 0, -p90_dev, length_includes_head=True,
-             head_width=0.05, head_length=1e-5, linewidth=2, fc='r', ec='r')
+    ax.plot([1.5+offset, 1.5+offset], [p50_mean-p50_dev, p50_mean+p50_dev], linewidth=1, linestyle='dashed', color=color)
+    ax.plot([1.4+offset, 1.6+offset], [p50_mean-p50_dev, p50_mean-p50_dev], linewidth=1, color=color)
+    ax.plot([1.4+offset, 1.6+offset], [p50_mean+p50_dev, p50_mean+p50_dev], linewidth=1, color=color)
 
     ax.set_title(title)
     ax.set_ylabel(ylabel)
     ax.set_xticks([])
-    ax.set_xlim(1, 21)
+    ax.set_xlim(0.5, 18.5)
 
 def assembleSparseData():
     """Visualize sparse data for the FluidFlower benchmark"""
@@ -63,13 +55,17 @@ def assembleSparseData():
                  "../../delft/delft-DARSim/sparse_data.csv",
                  "../../delft/delft-DARTS/sparse_data.csv",
                  "../../herriot-watt/HWU-sparsedata-final.csv",
-                 "../../imperial/sparse_data.csv",
                  "../../lanl/sparse_data.csv",
                  "../../melbourne/sparse_data.csv",
                  "../../stanford/sparse_data.csv",
                  "../../stuttgart/sparse_data.csv"]
-    groups = ["Austin", "CSIRO", "Delft-DARSim", "Delft-DARTS", "Heriot-Watt", "Imperial", "LANL", "Melbourne", "Stanford", "Stuttgart"]
-    colors = ["C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9"]
+    groups = ["Austin", "CSIRO", "Delft-DARSim", "Delft-DARTS", "Heriot-Watt", "LANL", "Melbourne", "Stanford", "Stuttgart"]
+    colors = ["C0", "C1", "C2", "C3", "C4", "C6", "C7", "C8", "C9"]
+
+    font = {'family' : 'normal',
+            'weight' : 'normal',
+            'size' : 14}
+    matplotlib.rc('font', **font)
 
     figP, axsP = plt.subplots(2, 1, figsize=(12, 8))
     figT, axsT = plt.subplots(2, 1, figsize=(12, 8))
@@ -89,8 +85,8 @@ def assembleSparseData():
         skip_footer = 0
 
         csvData = np.genfromtxt(fileName, delimiter=delimiter, skip_header=skip_header, skip_footer=skip_footer)
-        visualizeRow(csvData[0], axsP[0], '1a: sensor 1', 'pressure [N/m2]', group, color, offset)
-        visualizeRow(csvData[1], axsP[1], '1b: sensor 2', 'pressure [N/m2]', group, color, offset)
+        visualizeRow(csvData[0]/1e5, axsP[0], '1a: sensor 1', 'pressure [bar]', group, color, offset)
+        visualizeRow(csvData[1]/1e5, axsP[1], '1b: sensor 2', 'pressure [bar]', group, color, offset)
 
         visualizeRow(csvData[2]/60, axsT[0], '2: max mobile free phase in Box A', 'time [min]', group, color, offset)
         visualizeRow(csvData[11]/60, axsT[1], '5: M exceeds 110% of Box C’s width', 'time [min]', group, color, offset)
@@ -106,26 +102,30 @@ def assembleSparseData():
 
         offset = offset + 2.0
 
-    axsP[0].set_ylim(1.09e5, 1.14e5)
-    axsP[1].set_ylim(1.035e5, 1.065e5)
-    axsP[1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    axsP[0].set_ylim(1.09e0, 1.14e0)
+    axsP[1].set_ylim(1.035e0, 1.065e0)
+    handles, labels = axsP[1].get_legend_handles_labels()
+    figP.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.08), ncol=5)
 
     axsT[0].set_ylim(2.0e2, 3.7e2)
     # axsT[0].set_yscale('log')
     axsT[1].set_ylim(8.0e1, 2.2e3)
     # axsT[1].set_yscale('log')
-    axsT[1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    handles, labels = axsT[1].get_legend_handles_labels()
+    figT.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.02), ncol=5)
 
-    axsA[0][0].set_ylim(0.0, 3e-0)
-    axsA[0][1].set_ylim(0.0, 5e-0)
-    axsA[1][0].set_ylim(0.0, 5e-0)
-    axsA[1][1].set_ylim(0.0, 1e-0)
-    axsB[0][0].set_ylim(0.0, 3e-1)
-    axsB[0][1].set_ylim(0.0, 4e-2)
-    axsB[1][0].set_ylim(0.0, 2.2e-0)
-    axsB[1][1].set_ylim(0.0, 6e-1)
-    axsA[1][1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
-    axsB[1][1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    axsA[0][0].set_ylim(-0.1, 3e-0)
+    axsA[0][1].set_ylim(-0.2, 5e-0)
+    axsA[1][0].set_ylim(-0.2, 5e-0)
+    axsA[1][1].set_ylim(-0.05, 1e-0)
+    axsB[0][0].set_ylim(-0.02, 3e-1)
+    axsB[0][1].set_ylim(-0.002, 4e-2)
+    axsB[1][0].set_ylim(-0.1, 2.2e-0)
+    axsB[1][1].set_ylim(-0.05, 6e-1)
+    handles, labels = axsA[1][1].get_legend_handles_labels()
+    figA.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.02), ncol=5)
+    handles, labels = axsB[1][1].get_legend_handles_labels()
+    figB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.02), ncol=5)
 
     figP.tight_layout()
     figP.savefig('sparse_data_pressure.png', bbox_inches='tight')

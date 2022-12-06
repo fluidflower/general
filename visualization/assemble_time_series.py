@@ -23,10 +23,11 @@ def assembleTimeSeries():
                  "../../stanford/time_series_final.csv",
                  "../../stuttgart/time_series.csv"]
     groups = ["Austin", "CSIRO", "Delft-DARSim", "Delft-DARTS", "Heriot-Watt", "LANL", "Melbourne", "Stanford", "Stuttgart"]
+    colors = ["C0", "C1", "C2", "C3", "C4", "C6", "C7", "C8", "C9"]
 
     font = {'family' : 'normal',
             'weight' : 'normal',
-            'size' : 12}
+            'size' : 14}
     matplotlib.rc('font', **font)
 
     figP, axsP = plt.subplots(1, 2, figsize=(12, 4))
@@ -36,7 +37,7 @@ def assembleTimeSeries():
     figC, axsC = plt.subplots(figsize=(6, 4))
     figT, axsT = plt.subplots(figsize=(6, 4))
 
-    for fileName, group in zip(fileNames, groups):
+    for fileName, group, color in zip(fileNames, groups, colors):
         print(f'Processing {fileName}.')
 
         skip_header = 0
@@ -49,88 +50,88 @@ def assembleTimeSeries():
         csvData = np.genfromtxt(fileName, delimiter=delimiter, skip_header=skip_header)
         t = csvData[:, 0]/60
 
-        axsP[0].plot(t, 1e-5*csvData[:, 1], label=group)
+        axsP[0].plot(t, csvData[:, 1]/1e5, label=group, color=color)
         axsP[0].set_title('sensor 1')
         axsP[0].set_xlabel('time [min]')
         axsP[0].set_ylabel('pressure [bar]')
         axsP[0].set_ylim(1.09e0, 1.15e0)
         axsP[0].set_xlim(-1.0, 7260.0)
 
-        axsP[1].plot(t, 1e-5*csvData[:, 2], label=group)
+        axsP[1].plot(t, csvData[:, 2]/1e5, label=group, color=color)
         axsP[1].set_title('sensor 2')
         axsP[1].set_xlabel('time [min]')
         axsP[1].set_ylim(1.03e0, 1.09e0)
         axsP[1].set_xlim(-1.0, 7260.0)
 
-        axsPT[0].plot(t, 1e-5*csvData[:, 1], label=group)
+        axsPT[0].plot(t, csvData[:, 1]/1e5, label=group, color=color)
         axsPT[0].set_title('sensor 1')
         axsPT[0].set_xlabel('time [min]')
         axsPT[0].set_ylabel('pressure [bar]')
-        axsPT[0].set_xlim(-0.1, 370.0)
+        axsPT[0].set_xlim(-0.1, 610.0)
         axsPT[0].set_ylim(1.09e0, 1.15e0)
 
-        axsPT[1].plot(t, 1e-5*csvData[:, 2], label=group)
+        axsPT[1].plot(t, csvData[:, 2]/1e5, label=group, color=color)
         axsPT[1].set_title('sensor 2')
         axsPT[1].set_xlabel('time [min]')
-        axsPT[1].set_xlim(-0.1, 370.0)
+        axsPT[1].set_xlim(-0.1, 610.0)
         axsPT[1].set_ylim(1.03e0, 1.09e0)
 
-        axsA[0, 0].plot(t, 1e3*csvData[:, 3], label=group)
+        axsA[0, 0].plot(t, 1e3*csvData[:, 3], label=group, color=color)
         axsA[0, 0].set_title('mobile')
         axsA[0, 0].set_ylabel('CO2 [g]')
         axsA[0, 0].set_xlim(-1.0, 7260.0)
         axsA[0, 0].set_ylim(-0.1, 3.0)
 
-        axsA[0, 1].plot(t, 1e3*csvData[:, 4], label=group)
+        axsA[0, 1].plot(t, 1e3*csvData[:, 4], label=group, color=color)
         axsA[0, 1].set_title('immobile')
         axsA[0, 1].set_xlim(-1.0, 7260.0)
         axsA[0, 1].set_ylim(-0.01, 0.3)
 
-        axsA[1, 0].plot(t, 1e3*csvData[:, 5], label=group)
+        axsA[1, 0].plot(t, 1e3*csvData[:, 5], label=group, color=color)
         axsA[1, 0].set_title('dissolved')
         axsA[1, 0].set_xlabel('time [min]')
         axsA[1, 0].set_ylabel('CO2 [g]')
         axsA[1, 0].set_xlim(-1.0, 7260.0)
         axsA[1, 0].set_ylim(-0.01, 6.0)
 
-        axsA[1, 1].plot(t, 1e3*csvData[:, 6], label=group)
+        axsA[1, 1].plot(t, 1e3*csvData[:, 6], label=group, color=color)
         axsA[1, 1].set_title('seal')
         axsA[1, 1].set_xlabel('time [min]')
         axsA[1, 1].set_xlim(-1.0, 7260.0)
         axsA[1, 1].set_ylim(-0.01, 1.0)
 
-        axsB[0, 0].plot(t, 1e3*csvData[:, 7], label=group)
+        axsB[0, 0].plot(t, 1e3*csvData[:, 7], label=group, color=color)
         axsB[0, 0].set_title('mobile')
         axsB[0, 0].set_ylabel('CO2 [g]')
         axsB[0, 0].set_xlim(-1.0, 7260.0)
         axsB[0, 0].set_ylim(-0.01, 0.6)
 
-        axsB[0, 1].plot(t, 1e3*csvData[:, 8], label=group)
+        axsB[0, 1].plot(t, 1e3*csvData[:, 8], label=group, color=color)
         axsB[0, 1].set_title('immobile')
         axsB[0, 1].set_xlim(-1.0, 7260.0)
         axsB[0, 1].set_ylim(-0.001, 0.07)
 
-        axsB[1, 0].plot(t, 1e3*csvData[:, 9], label=group)
+        axsB[1, 0].plot(t, 1e3*csvData[:, 9], label=group, color=color)
         axsB[1, 0].set_title('dissolved')
         axsB[1, 0].set_xlabel('time [min]')
         axsB[1, 0].set_ylabel('CO2 [g]')
         axsB[1, 0].set_xlim(-1.0, 7260.0)
         axsB[1, 0].set_ylim(-0.01, 2.5)
 
-        axsB[1, 1].plot(t, 1e3*csvData[:, 10], label=group)
+        axsB[1, 1].plot(t, 1e3*csvData[:, 10], label=group, color=color)
         axsB[1, 1].set_title('seal')
         axsB[1, 1].set_xlabel('time [min]')
         axsB[1, 1].set_xlim(-1.0, 7260.0)
         axsB[1, 1].set_ylim(-0.01, 0.6)
 
-        axsC.plot(t, csvData[:, 11], label=group)
+        axsC.plot(t, csvData[:, 11], label=group, color=color)
         axsC.set_title('convection in Box C')
         axsC.set_xlabel('time [min]')
         axsC.set_ylabel('M [m]')
         axsC.set_xlim(-1.0, 7260.0)
         axsC.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
-        axsT.plot(t, 1e3*csvData[:, 12], label=group)
+        axsT.plot(t, 1e3*csvData[:, 12], label=group, color=color)
         axsT.set_title('total CO2 mass')
         axsT.set_xlabel('time [min]')
         axsT.set_ylabel('mass [g]')
@@ -139,18 +140,21 @@ def assembleTimeSeries():
         axsT.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
     handles, labels = axsP[1].get_legend_handles_labels()
-    figP.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.12), ncol=5)
-    handles, labels = axsPT[1].get_legend_handles_labels()
-    figPT.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.12), ncol=5)
-    handles, labels = axsA[1, 1].get_legend_handles_labels()
-    figA.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 0.99), ncol=5)
-    handles, labels = axsB[1, 1].get_legend_handles_labels()
-    figB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 0.99), ncol=5)
-
+    figP.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=5)
     figP.savefig('time_series_pressure.png', bbox_inches='tight')
+
+    handles, labels = axsPT[1].get_legend_handles_labels()
+    figPT.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=5)
     figPT.savefig('time_series_pressure_zoom_time.png', bbox_inches='tight')
+
+    handles, labels = axsA[1][1].get_legend_handles_labels()
+    figA.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.01), ncol=5)
     figA.savefig('time_series_boxA.png', bbox_inches='tight')
+
+    handles, labels = axsB[1][1].get_legend_handles_labels()
+    figB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.01), ncol=5)
     figB.savefig('time_series_boxB.png', bbox_inches='tight')
+
     figC.savefig('time_series_boxC.png', bbox_inches='tight')
     figT.savefig('time_series_co2mass.png', bbox_inches='tight')
 
