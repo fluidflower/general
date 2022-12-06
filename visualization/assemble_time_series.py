@@ -18,16 +18,15 @@ def assembleTimeSeries():
                  "../../delft/delft-DARSim/time_series.csv",
                  "../../delft/delft-DARTS/time_series.csv",
                  "../../herriot-watt/HWU-FinalTimeSeries.csv",
-                 "../../imperial/time_series.csv",
                  "../../lanl/time_series.csv",
                  "../../melbourne/time_series.csv",
                  "../../stanford/time_series_final.csv",
                  "../../stuttgart/time_series.csv"]
-    groups = ["Austin", "CSIRO", "Delft-DARSim", "Delft-DARTS", "Heriot-Watt", "Imperial", "LANL", "Melbourne", "Stanford", "Stuttgart"]
+    groups = ["Austin", "CSIRO", "Delft-DARSim", "Delft-DARTS", "Heriot-Watt", "LANL", "Melbourne", "Stanford", "Stuttgart"]
 
     font = {'family' : 'normal',
             'weight' : 'normal',
-            'size' : 16}
+            'size' : 12}
     matplotlib.rc('font', **font)
 
     figP, axsP = plt.subplots(1, 2, figsize=(12, 4))
@@ -50,33 +49,31 @@ def assembleTimeSeries():
         csvData = np.genfromtxt(fileName, delimiter=delimiter, skip_header=skip_header)
         t = csvData[:, 0]/60
 
-        axsP[0].plot(t, csvData[:, 1], label=group)
+        axsP[0].plot(t, 1e-5*csvData[:, 1], label=group)
         axsP[0].set_title('sensor 1')
         axsP[0].set_xlabel('time [min]')
-        axsP[0].set_ylabel('pressure [N/m2]')
-        axsP[0].set_ylim(1.09e5, 1.15e5)
+        axsP[0].set_ylabel('pressure [bar]')
+        axsP[0].set_ylim(1.09e0, 1.15e0)
         axsP[0].set_xlim(-1.0, 7260.0)
 
-        axsP[1].plot(t, csvData[:, 2], label=group)
+        axsP[1].plot(t, 1e-5*csvData[:, 2], label=group)
         axsP[1].set_title('sensor 2')
         axsP[1].set_xlabel('time [min]')
-        axsP[1].set_ylim(1.03e5, 1.09e5)
+        axsP[1].set_ylim(1.03e0, 1.09e0)
         axsP[1].set_xlim(-1.0, 7260.0)
-        axsP[1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
-        axsPT[0].plot(t, csvData[:, 1], label=group)
+        axsPT[0].plot(t, 1e-5*csvData[:, 1], label=group)
         axsPT[0].set_title('sensor 1')
         axsPT[0].set_xlabel('time [min]')
-        axsPT[0].set_ylabel('pressure [N/m2]')
-        axsPT[0].set_xlim(-0.1, 610.0)
-        axsPT[0].set_ylim(1.09e5, 1.15e5)
+        axsPT[0].set_ylabel('pressure [bar]')
+        axsPT[0].set_xlim(-0.1, 370.0)
+        axsPT[0].set_ylim(1.09e0, 1.15e0)
 
-        axsPT[1].plot(t, csvData[:, 2], label=group)
+        axsPT[1].plot(t, 1e-5*csvData[:, 2], label=group)
         axsPT[1].set_title('sensor 2')
         axsPT[1].set_xlabel('time [min]')
-        axsPT[1].set_xlim(-0.1, 610.0)
-        axsPT[1].set_ylim(1.03e5, 1.09e5)
-        axsPT[1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        axsPT[1].set_xlim(-0.1, 370.0)
+        axsPT[1].set_ylim(1.03e0, 1.09e0)
 
         axsA[0, 0].plot(t, 1e3*csvData[:, 3], label=group)
         axsA[0, 0].set_title('mobile')
@@ -99,7 +96,6 @@ def assembleTimeSeries():
         axsA[1, 1].plot(t, 1e3*csvData[:, 6], label=group)
         axsA[1, 1].set_title('seal')
         axsA[1, 1].set_xlabel('time [min]')
-        axsA[1, 1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
         axsA[1, 1].set_xlim(-1.0, 7260.0)
         axsA[1, 1].set_ylim(-0.01, 1.0)
 
@@ -124,7 +120,6 @@ def assembleTimeSeries():
         axsB[1, 1].plot(t, 1e3*csvData[:, 10], label=group)
         axsB[1, 1].set_title('seal')
         axsB[1, 1].set_xlabel('time [min]')
-        axsB[1, 1].legend(loc='center left', bbox_to_anchor=(1, 0.5))
         axsB[1, 1].set_xlim(-1.0, 7260.0)
         axsB[1, 1].set_ylim(-0.01, 0.6)
 
@@ -142,6 +137,15 @@ def assembleTimeSeries():
         axsT.set_xlim(-1.0, 7260.0)
         axsT.set_ylim(-0.01, 10.0)
         axsT.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+
+    handles, labels = axsP[1].get_legend_handles_labels()
+    figP.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.12), ncol=5)
+    handles, labels = axsPT[1].get_legend_handles_labels()
+    figPT.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.12), ncol=5)
+    handles, labels = axsA[1, 1].get_legend_handles_labels()
+    figA.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 0.99), ncol=5)
+    handles, labels = axsB[1, 1].get_legend_handles_labels()
+    figB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 0.99), ncol=5)
 
     figP.savefig('time_series_pressure.png', bbox_inches='tight')
     figPT.savefig('time_series_pressure_zoom_time.png', bbox_inches='tight')

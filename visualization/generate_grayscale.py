@@ -89,7 +89,7 @@ def generateGrayScale():
     # The added pixels correspond to the automatically added whitespace which can be removed
     # only when saving the figure to disk.
     my_dpi = 96
-    fig = plt.figure(figsize=((286*2+170)/my_dpi, (123*2+74)/my_dpi), dpi=my_dpi)
+    fig = plt.figure(figsize=((286+85)/my_dpi, (123+37)/my_dpi), dpi=my_dpi)
 
     inFileName = cmdArgs["infilename"]
 
