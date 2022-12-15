@@ -16,14 +16,11 @@ def calculateEMD(inFileName1, inFileName2):
     im1 = Image.open(inFileName1).convert('L')
     im1 = im1.resize((140,60), Image.ANTIALIAS)
     Nx, Ny = im1.size
-    #print(Nx, Ny)
     a = np.array(im1.getdata()).reshape(Nx, Ny)
-    #print(np.sum(a))
 
     im2 = Image.open(inFileName2).convert('L')
     im2 = im2.resize(im1.size, Image.ANTIALIAS)
     b = np.array(im2.getdata()).reshape(Nx, Ny)
-    #b = np.ones((140, 60))
 
     # Make a and b 'true' distributions
     # NOTE: cv2 will internally convert a and b to distributions (summing
@@ -31,59 +28,34 @@ def calculateEMD(inFileName1, inFileName2):
     # Furthermore, it requires a and b to be compatible, i.e., that their
     # sums are equal. While cv2 does not, it is however also not clear
     # how to interpret the result for non-compatible signals.
-    if True:
-        a = a/np.sum(a)
-        b = b/np.sum(b)
+    a = a/np.sum(a)
+    b = b/np.sum(b)
 
     # Determine EMD using ot
-    if True:
-        # OT takes 1d arrays as inputs
-        a_flat = a.flatten(order = "F")
-        b_flat = b.flatten(order = "F")
-        
-        # Cell centers of all cells - x and y coordinates.
-        cc_x = np.zeros((Nx,Ny), dtype=float).flatten("F")
-        cc_y = np.zeros((Nx,Ny), dtype=float).flatten("F")
-        
-        cc_x, cc_y = np.meshgrid(np.arange(Nx), np.arange(Ny), indexing="ij")
-        
-        cc_x_flat = cc_x.flatten("F")/Nx*2.8 + 5e-3*280/Nx
-        cc_y_flat = cc_y.flatten("F")/Ny*1.2 + 5e-3*120/Ny
-        #print(cc_x_flat, cc_y_flat)
-        
-        cc = np.vstack((cc_x_flat, cc_y_flat)).T
-        
-        # Distance matrix
-        # NOTE the definition of this distance matrix is memory consuming and
-        # does not allow for too large distributions.
-        M = ot.dist(cc, cc, metric="euclidean")
-        
-        dist_ot = ot.emd2(a_flat, b_flat, M, numItermax=500000)
-        print(f'{inFileName1}, {inFileName2}: {dist_ot}')
+    # OT takes 1d arrays as inputs
+    a_flat = a.flatten(order = "F")
+    b_flat = b.flatten(order = "F")
 
-        return dist_ot
+    # Cell centers of all cells - x and y coordinates.
+    cc_x = np.zeros((Nx,Ny), dtype=float).flatten("F")
+    cc_y = np.zeros((Nx,Ny), dtype=float).flatten("F")
 
-    # Determine EMD using cv2
-    if False:
-        # CV2 requires a transformation.
-        def img_to_sig(arr, dx=1):
-            """Convert a 2D array to a signature for cv2.EMD"""
+    cc_x, cc_y = np.meshgrid(np.arange(Nx), np.arange(Ny), indexing="ij")
         
-            # cv2.EMD requires single-precision, floating-point input
-            sig = np.empty((arr.size, 3), dtype=np.float32)
-            count = 0
-            for i in range(arr.shape[0]):
-                for j in range(arr.shape[1]):
-                    sig[count] = np.array([arr[i,j], i * dx, j * dx])
-                    count += 1
-            return sig
+    cc_x_flat = cc_x.flatten("F")/Nx*2.8 + 5e-3*280/Nx
+    cc_y_flat = cc_y.flatten("F")/Ny*1.2 + 5e-3*120/Ny
         
-        # CV2 takes signals that contain both data and coordinates
-        a_sig = img_to_sig(a, dx=1)
-        b_sig = img_to_sig(b, dx=1)
+    cc = np.vstack((cc_x_flat, cc_y_flat)).T
         
-        dist_cv2, _, _ = cv2.EMD(a_sig, b_sig, cv2.DIST_L2)
-        print(dist_cv2)
+    # Distance matrix
+    # NOTE the definition of this distance matrix is memory consuming and
+    # does not allow for too large distributions.
+    M = ot.dist(cc, cc, metric="euclidean")
+        
+    dist_ot = ot.emd2(a_flat, b_flat, M, numItermax=500000)
+    print(f'{inFileName1}, {inFileName2}: {dist_ot}')
+
+    return dist_ot
 
 def emd():
     """Calculate the Wasserstein distance between two grayscale images"""

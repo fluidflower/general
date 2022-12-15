@@ -22,7 +22,7 @@ for i in range(numGroups):
 
 plt.tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
 plt.legend()
-plt.savefig("pcoa_individual.png")
+plt.savefig("pcoa_individual.png", bbox_inches='tight')
 plt.clf()
 
 accumulated = np.zeros((numGroups, numGroups))
@@ -38,4 +38,4 @@ for i in range(numGroups):
   plt.text(pcoa.samples.loc[str(i), 'PC1'],  pcoa.samples.loc[str(i), 'PC2'], groups[i])
 
 plt.tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
-plt.savefig("pcoa_accumulated.png")
+plt.savefig("pcoa_accumulated.png", bbox_inches='tight')

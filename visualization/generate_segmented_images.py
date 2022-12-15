@@ -11,7 +11,7 @@ import numpy as np
 from PIL import Image
 
 
-def generateImages(modelResult, experimentalData, outFileName):
+def generateImages(modelResult, experimentalData, outFileName, onlyModCont=False):
     modImage = Image.new('RGBA', (280, 120))
     modPixels = modImage.load()
     for i in range(0, modImage.size[0]):
@@ -26,7 +26,8 @@ def generateImages(modelResult, experimentalData, outFileName):
     modContImage = modImage.copy()
     modContPixels = modContImage.load()
     modImage = modImage.resize((560, 240))
-    modImage.save(f'{outFileName}_mod.png')
+    if not onlyModCont:
+        modImage.save(f'{outFileName}_mod.png')
 
     expImage = Image.new('RGBA', (280, 120))
     expPixels = expImage.load()
@@ -42,32 +43,66 @@ def generateImages(modelResult, experimentalData, outFileName):
     expContImage = expImage.copy()
     expContPixels = expContImage.load()
     expImage = expImage.resize((560, 240))
-    expImage.save(f'{outFileName}_exp.png')
+    if not onlyModCont:
+        expImage.save(f'{outFileName}_exp.png')
 
     for i in range(1, expContImage.size[0]-1):
         for j in range(1, expContImage.size[1]-1):
             if modelResult[j, i] == 1 and any(
                 val == 0 for val in [modelResult[j-1, i], modelResult[j+1, i], modelResult[j, i-1], modelResult[j, i+1]]):
+                    expContPixels[i-1, j-1] = (0,255,0)
+                    expContPixels[i-1, j] = (0,255,0)
+                    expContPixels[i-1, j+1] = (0,255,0)
+                    expContPixels[i, j-1] = (0,255,0)
                     expContPixels[i, j] = (0,255,0)
+                    expContPixels[i, j+1] = (0,255,0)
+                    expContPixels[i+1, j-1] = (0,255,0)
+                    expContPixels[i+1, j] = (0,255,0)
+                    expContPixels[i+1, j+1] = (0,255,0)
             elif modelResult[j, i] == 2 and any(
                 val < 2 for val in [modelResult[j-1, i], modelResult[j+1, i], modelResult[j, i-1], modelResult[j, i+1]]):
+                    expContPixels[i-1, j-1] = (255,0,0)
+                    expContPixels[i-1, j] = (255,0,0)
+                    expContPixels[i-1, j+1] = (255,0,0)
+                    expContPixels[i, j-1] = (255,0,0)
                     expContPixels[i, j] = (255,0,0)
+                    expContPixels[i, j+1] = (255,0,0)
+                    expContPixels[i+1, j-1] = (255,0,0)
+                    expContPixels[i+1, j] = (255,0,0)
+                    expContPixels[i+1, j+1] = (255,0,0)
             elif experimentalData[j, i] == 1:
                 expContPixels[i, j] = (138,254,190)
             elif experimentalData[j, i] == 2:
                 expContPixels[i, j] = (249,107,107)
 
     expContImage = expContImage.resize((560, 240))
-    expContImage.save(f'{outFileName}_exp_cont.png')
+    if not onlyModCont:
+        expContImage.save(f'{outFileName}_exp_cont.png')
 
     for i in range(1, modContImage.size[0]-1):
         for j in range(1, modContImage.size[1]-1):
             if experimentalData[j, i] == 1 and any(
                 val == 0 for val in [experimentalData[j-1, i], experimentalData[j+1, i], experimentalData[j, i-1], experimentalData[j, i+1]]):
+                    modContPixels[i-1, j-1] = (0,255,0)
+                    modContPixels[i-1, j] = (0,255,0)
+                    modContPixels[i-1, j+1] = (0,255,0)
+                    modContPixels[i, j-1] = (0,255,0)
                     modContPixels[i, j] = (0,255,0)
+                    modContPixels[i, j+1] = (0,255,0)
+                    modContPixels[i+1, j-1] = (0,255,0)
+                    modContPixels[i+1, j] = (0,255,0)
+                    modContPixels[i+1, j+1] = (0,255,0)
             elif experimentalData[j, i] == 2 and any(
                 val < 2 for val in [experimentalData[j-1, i], experimentalData[j+1, i], experimentalData[j, i-1], experimentalData[j, i+1]]):
+                    modContPixels[i-1, j-1] = (255,0,0)
+                    modContPixels[i-1, j] = (255,0,0)
+                    modContPixels[i-1, j+1] = (255,0,0)
+                    modContPixels[i, j-1] = (255,0,0)
                     modContPixels[i, j] = (255,0,0)
+                    modContPixels[i, j+1] = (255,0,0)
+                    modContPixels[i+1, j-1] = (255,0,0)
+                    modContPixels[i+1, j] = (255,0,0)
+                    modContPixels[i+1, j+1] = (255,0,0)
             elif modelResult[j, i] == 1:
                 modContPixels[i, j] = (138,254,190)
             elif modelResult[j, i] == 2:
@@ -97,19 +132,23 @@ def generateSegmentMap(fileName, xmin, xmax, ymin, ymax, satmin, conmin):
 
     segmentMap = np.zeros((120, 280), dtype=int)
 
-    if nX != 286 or nY != 123:
+    if not ((nX == 286 and nY == 123) or (nX == 280 and nY == 120)):
         print("Warning: wrong dimensions. Return 0 segment map.")
         return segmentMap
-    
+
+    offset = 0
+    if nX == 286:
+        offset = 3
+
     # Start from the fourth row as the first three are not contained in the experimental data
-    for i in np.arange(3, nY):
+    for i in np.arange(offset, nY):
         # For the same reason, exclude the first and last three columns
-        for j in np.arange(3, nX-3):
+        for j in np.arange(offset, nX-offset):
             # The first row of the segment map corresponds to the top of the domain
             if saturation[i, j] > satmin:
-                segmentMap[122-i, j-3] = 2
+                segmentMap[119+offset-i, j-offset] = 2
             elif concentration[i, j] > conmin:
-                segmentMap[122-i, j-3] = 1
+                segmentMap[119+offset-i, j-offset] = 1 
 
     return segmentMap
 
@@ -139,7 +178,6 @@ def generateSegmentedImages():
     cmdArgs = vars(parser.parse_args())
 
     modelResult = generateSegmentMap(cmdArgs["modelresult"], cmdArgs["xmin"], cmdArgs["xmax"], cmdArgs["ymin"], cmdArgs["ymax"], cmdArgs["minimumsaturation"], cmdArgs["minimumconcentration"])
-    print(modelResult)
 
     experimentalData = np.loadtxt(cmdArgs["experimentaldata"], dtype='int', delimiter=',')
     # skip the first 30 rows as they are not contained in the modeling results
