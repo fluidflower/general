@@ -16,14 +16,14 @@ def visualizeRow(means, stddevs, expData, ax):
     ax.plot([1.4, 1.6], [median + dev, median + dev], linewidth=1, color='r')
     ax.scatter(1.2*np.ones(len(means)), means, s=96, c='r')
 
-    mean = expData[8]
-    dev = expData[9]
+    mean = expData[6]
+    dev = expData[7]
 
     ax.plot([2.5, 3.5], [mean, mean], linewidth=2, color='k')
     ax.plot([3.0, 3.0], [mean - dev, mean + dev], linewidth=1, linestyle='dashed', color='k')
     ax.plot([2.9, 3.1], [mean - dev, mean - dev], linewidth=1, color='k')
     ax.plot([2.9, 3.1], [mean + dev, mean + dev], linewidth=1, color='k')
-    ax.scatter(2.7*np.ones(6), expData[0:6], s=96, c='k')
+    ax.scatter(2.7*np.ones(5), expData[1:6], s=96, c='k')
 
 def compareSparseData():
     """Compare sparse data for the FluidFlower benchmark"""
@@ -73,6 +73,22 @@ def compareSparseData():
     expName = '../../experiment/benchmarkdata/sparse_data/sparse_data.csv'
     expData = np.genfromtxt(expName, delimiter=',', skip_header=1, skip_footer=0)
 
+    figP, axsP = plt.subplots(1, 2, figsize=(12, 6))
+    visualizeRow(means[0, :]/1e5, stddevs[0, :]/1e5, expData[0, :]/1e5, axsP[0])
+    axsP[0].set_ylabel('pressure [bar]')
+    axsP[0].set_title('1a: sensor 1')
+#    axsP[0].set_ylim((220, 320))
+    axsP[0].set_xticks([])
+    visualizeRow(means[1, :]/1e5, stddevs[1, :]/1e5, expData[1, :]/1e5, axsP[1])
+    axsP[1].set_title('1b: sensor 2')
+#    axsP[1].set_ylim((150, 300))
+    axsP[1].set_xticks([])
+    axsP[1].set_yticks([1.04, 1.05, 1.06, 1.07, 1.08])
+    handles, labels = axsP[0].get_legend_handles_labels()
+    figP.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.07), ncol=2)
+    figP.tight_layout()
+    figP.savefig('compare_sparse_pressure.png', bbox_inches='tight')
+
     figT, axsT = plt.subplots(1, 2, figsize=(12, 6))
     visualizeRow(means[2, :]/60, stddevs[2, :]/60, expData[2, :]/60, axsT[0])
     axsT[0].set_ylabel('time [min]')
@@ -82,7 +98,7 @@ def compareSparseData():
     visualizeRow(means[11, :]/60, stddevs[11, :]/60, expData[11, :]/60, axsT[1])
     visualizeRow(means[11, :]/60, stddevs[11, :]/60, expData[12, :]/60, axsT[1])
     axsT[1].set_title('5: M exceeds 110% of Box C’s width')
-    axsT[1].set_ylim((150, 350))
+    axsT[1].set_ylim((150, 300))
     axsT[1].set_xticks([])
     handles, labels = axsT[0].get_legend_handles_labels()
     figT.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.07), ncol=2)
