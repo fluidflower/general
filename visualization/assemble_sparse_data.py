@@ -71,6 +71,7 @@ def assembleSparseData():
     figT, axsT = plt.subplots(2, 1, figsize=(12, 8))
     figA, axsA = plt.subplots(2, 2, figsize=(16, 8))
     figB, axsB = plt.subplots(2, 2, figsize=(16, 8))
+    figS, axsS = plt.subplots(1, 1, figsize=(12, 5))
     offset = 0.0
 
     for fileName, group, color in zip(fileNames, groups, colors):
@@ -95,10 +96,13 @@ def assembleSparseData():
         visualizeRow(1e3*csvData[4], axsA[0, 1], '3b: immobile free phase', 'mass [g]', group, color, offset)
         visualizeRow(1e3*csvData[5], axsA[1, 0], '3c: dissolved in water', 'mass [g]', group, color, offset)
         visualizeRow(1e3*csvData[6], axsA[1, 1], '3d: seal', 'mass [g]', group, color, offset)
+
         visualizeRow(1e3*csvData[7], axsB[0, 0], '4a: mobile free phase', 'mass [g]', group, color, offset)
         visualizeRow(1e3*csvData[8], axsB[0, 1], '4b: immobile free phase', 'mass [g]', group, color, offset)
         visualizeRow(1e3*csvData[9], axsB[1, 0], '4c: dissolved in water', 'mass [g]', group, color, offset)
         visualizeRow(1e3*csvData[10], axsB[1, 1], '4d: seal', 'mass [g]', group, color, offset)
+
+        visualizeRow(1e3*csvData[12], axsS, '6: total CO2 mass in top seal facies', 'mass [g]', group, color, offset)
 
         offset = offset + 2.0
 
@@ -108,11 +112,13 @@ def assembleSparseData():
     figP.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.08), ncol=5)
 
     axsT[0].set_ylim(3.3, 6.2)
-    # axsT[0].set_yscale('log')
     axsT[1].set_ylim(1.3, 35.0)
-    # axsT[1].set_yscale('log')
     handles, labels = axsT[1].get_legend_handles_labels()
     figT.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.02), ncol=5)
+
+    axsS.set_ylim(-0.02, 0.8)
+    handles, labels = axsS.get_legend_handles_labels()
+    figS.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.1), ncol=5)
 
     axsA[0][0].set_ylim(-0.1, 3e-0)
     axsA[0][1].set_ylim(-0.2, 5e-0)
@@ -132,6 +138,7 @@ def assembleSparseData():
     figT.savefig('sparse_data_time.png', bbox_inches='tight')
     figA.savefig('sparse_data_boxA.png', bbox_inches='tight')
     figB.savefig('sparse_data_boxB.png', bbox_inches='tight')
+    figS.savefig('sparse_data_seal.png', bbox_inches='tight')
 
 if __name__ == "__main__":
     assembleSparseData()
