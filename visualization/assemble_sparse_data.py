@@ -88,8 +88,8 @@ def assembleSparseData():
         visualizeRow(csvData[0]/1e5, axsP[0], '1a: sensor 1', 'pressure [bar]', group, color, offset)
         visualizeRow(csvData[1]/1e5, axsP[1], '1b: sensor 2', 'pressure [bar]', group, color, offset)
 
-        visualizeRow(csvData[2]/60, axsT[0], '2: max mobile free phase in Box A', 'time [min]', group, color, offset)
-        visualizeRow(csvData[11]/60, axsT[1], '5: M exceeds 110% of Box C’s width', 'time [min]', group, color, offset)
+        visualizeRow(csvData[2]/60/60, axsT[0], '2: max mobile free phase in Box A', 'time [h]', group, color, offset)
+        visualizeRow(csvData[11]/60/60, axsT[1], '5: M exceeds 110% of Box C’s width', 'time [h]', group, color, offset)
 
         visualizeRow(1e3*csvData[3], axsA[0, 0], '3a: mobile free phase', 'mass [g]', group, color, offset)
         visualizeRow(1e3*csvData[4], axsA[0, 1], '3b: immobile free phase', 'mass [g]', group, color, offset)
@@ -107,9 +107,9 @@ def assembleSparseData():
     handles, labels = axsP[1].get_legend_handles_labels()
     figP.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.08), ncol=5)
 
-    axsT[0].set_ylim(2.0e2, 3.7e2)
+    axsT[0].set_ylim(3.3, 6.2)
     # axsT[0].set_yscale('log')
-    axsT[1].set_ylim(8.0e1, 2.2e3)
+    axsT[1].set_ylim(1.3, 35.0)
     # axsT[1].set_yscale('log')
     handles, labels = axsT[1].get_legend_handles_labels()
     figT.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.02), ncol=5)

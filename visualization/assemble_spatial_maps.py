@@ -49,7 +49,8 @@ def assembleSpatialMaps():
         cropImage(f'../../csiro/figures/spatial_map_{field}.png', 399, 180, 1026, 24, 'csiro_72.png')
         cropImage(f'../../delft/delft-DARSim/figures/spatial_map_{field}.png', 399, 180, 1026, 24, 'delft_darsim_72.png')
         cropImage(f'../../delft/delft-DARTS/figures/spatial_map_{field}.png', 399, 180, 1026, 24, 'delft_darts_72.png')
-        cropImage(f'../../herriot-watt/figures/spatial_map_{field}.png', 399, 180, 1026, 24, 'herriot-watt_72.png')
+        subprocess.run(["convert", "-size", "399x180", "xc:transparent", "herriot-watt_72.png"])
+        # cropImage(f'../../herriot-watt/figures/spatial_map_{field}.png', 399, 180, 1026, 24, 'herriot-watt_72.png')
         cropImage(f'../../lanl/figures/spatial_map_{field}.png', 399, 180, 1026, 24, 'lanl_72.png')
         cropImage(f'../../melbourne/Figures/spatial_map_{field}.png', 399, 180, 1026, 24, 'melbourne_72.png')
         cropImage(f'../../stanford/figures/spatial_map_{field}.png', 399, 180, 1026, 24, 'stanford_72.png')
@@ -58,8 +59,7 @@ def assembleSpatialMaps():
         subprocess.run(["convert", "temp.png", "-font", "helvetica-bold", "-fill", "yellow", "-pointsize", "36",
                         "-stroke", "black",
                         "-annotate", "+15+40", "Austin", "-annotate", "+515+40", "CSIRO", "-annotate",
-                        "+1015+40", "Delft-DARSim", "-annotate", "+15+265", "Delft-DARTS", "-annotate", "+515+265",
-                        "Heriot-Watt", "-annotate", "+1015+265", "LANL", "-annotate", "+15+490", "Melbourne",
+                        "+1015+40", "Delft-DARSim", "-annotate", "+15+265", "Delft-DARTS", "-annotate", "+1015+265", "LANL", "-annotate", "+15+490", "Melbourne",
                         "-annotate", "+515+490", "Stanford", "-annotate", "+1015+490", "Stuttgart", f"{field}_72h.png"])
         subprocess.run(["rm", "austin_72.png", "csiro_72.png", "delft_darsim_72.png", "delft_darts_72.png", "herriot-watt_72.png",
                         "lanl_72.png", "melbourne_72.png", "stanford_72.png", "stuttgart_72.png", "temp.png"])
@@ -68,7 +68,8 @@ def assembleSpatialMaps():
         cropImage(f'../../csiro/figures/spatial_map_{field}.png', 399, 180, 42, 276, 'csiro_96.png')
         cropImage(f'../../delft/delft-DARSim/figures/spatial_map_{field}.png', 399, 180, 42, 276, 'delft_darsim_96.png')
         cropImage(f'../../delft/delft-DARTS/figures/spatial_map_{field}.png', 399, 180, 42, 276, 'delft_darts_96.png')
-        cropImage(f'../../herriot-watt/figures/spatial_map_{field}.png', 399, 180, 42, 276, 'herriot-watt_96.png')
+        subprocess.run(["convert", "-size", "399x180", "xc:transparent", "herriot-watt_96.png"])
+        # cropImage(f'../../herriot-watt/figures/spatial_map_{field}.png', 399, 180, 42, 276, 'herriot-watt_96.png')
         cropImage(f'../../lanl/figures/spatial_map_{field}.png', 399, 180, 42, 276, 'lanl_96.png')
         cropImage(f'../../melbourne/Figures/spatial_map_{field}.png', 399, 180, 42, 276, 'melbourne_96.png')
         cropImage(f'../../stanford/figures/spatial_map_{field}.png', 399, 180, 42, 276, 'stanford_96.png')
@@ -77,8 +78,7 @@ def assembleSpatialMaps():
         subprocess.run(["convert", "temp.png", "-font", "helvetica-bold", "-fill", "yellow", "-pointsize", "36",
                         "-stroke", "black",
                         "-annotate", "+15+40", "Austin", "-annotate", "+515+40", "CSIRO", "-annotate",
-                        "+1015+40", "Delft-DARSim", "-annotate", "+15+265", "Delft-DARTS", "-annotate", "+515+265",
-                        "Heriot-Watt", "-annotate", "+1015+265", "LANL", "-annotate", "+15+490", "Melbourne",
+                        "+1015+40", "Delft-DARSim", "-annotate", "+15+265", "Delft-DARTS", "-annotate", "+1015+265", "LANL", "-annotate", "+15+490", "Melbourne",
                         "-annotate", "+515+490", "Stanford", "-annotate", "+1015+490", "Stuttgart", f"{field}_96h.png"])
         subprocess.run(["rm", "austin_96.png", "csiro_96.png", "delft_darsim_96.png", "delft_darts_96.png", "herriot-watt_96.png",
                         "lanl_96.png", "melbourne_96.png", "stanford_96.png", "stuttgart_96.png", "temp.png"])
@@ -87,7 +87,8 @@ def assembleSpatialMaps():
         cropImage(f'../../csiro/figures/spatial_map_{field}.png', 399, 180, 534, 276, 'csiro_120.png')
         cropImage(f'../../delft/delft-DARSim/figures/spatial_map_{field}.png', 399, 180, 534, 276, 'delft_darsim_120.png')
         cropImage(f'../../delft/delft-DARTS/figures/spatial_map_{field}.png', 399, 180, 534, 276, 'delft_darts_120.png')
-        cropImage(f'../../herriot-watt/figures/spatial_map_{field}.png', 399, 180, 534, 276, 'herriot-watt_120.png')
+        subprocess.run(["convert", "-size", "399x180", "xc:transparent", "herriot-watt_120.png"])
+        # cropImage(f'../../herriot-watt/figures/spatial_map_{field}.png', 399, 180, 534, 276, 'herriot-watt_120.png')
         cropImage(f'../../lanl/figures/spatial_map_{field}.png', 399, 180, 534, 276, 'lanl_120.png')
         cropImage(f'../../melbourne/Figures/spatial_map_{field}.png', 399, 180, 534, 276, 'melbourne_120.png')
         cropImage(f'../../stanford/figures/spatial_map_{field}.png', 399, 180, 534, 276, 'stanford_120.png')
@@ -96,8 +97,7 @@ def assembleSpatialMaps():
         subprocess.run(["convert", "temp.png", "-font", "helvetica-bold", "-fill", "yellow", "-pointsize", "36",
                         "-stroke", "black",
                         "-annotate", "+15+40", "Austin", "-annotate", "+515+40", "CSIRO", "-annotate",
-                        "+1015+40", "Delft-DARSim", "-annotate", "+15+265", "Delft-DARTS", "-annotate", "+515+265",
-                        "Heriot-Watt", "-annotate", "+1015+265", "LANL", "-annotate", "+15+490", "Melbourne",
+                        "+1015+40", "Delft-DARSim", "-annotate", "+15+265", "Delft-DARTS", "-annotate", "+1015+265", "LANL", "-annotate", "+15+490", "Melbourne",
                         "-annotate", "+515+490", "Stanford", "-annotate", "+1015+490", "Stuttgart", f"{field}_120h.png"])
         subprocess.run(["rm", "austin_120.png", "csiro_120.png", "delft_darsim_120.png", "delft_darts_120.png", "herriot-watt_120.png",
                         "lanl_120.png", "melbourne_120.png", "stanford_120.png", "stuttgart_120.png", "temp.png"])

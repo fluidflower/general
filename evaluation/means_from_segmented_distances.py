@@ -21,6 +21,8 @@ meanA_exp = np.mean(A[8:, :], axis=0)
 meanA_fore = np.mean(A[:8, :], axis=0) 
 
 for i in range(numGroups):
+    if i == 4:
+        continue
     axs[0][0].scatter(meanA_exp[i],  meanA_fore[i], s=96, c=colors[i], label=groups[i])
 axs[0][0].scatter(meanA_exp[8],  meanA_fore[8], s=96, c='k', marker='d', label='exp. run 1')
 axs[0][0].scatter(meanA_exp[9],  meanA_fore[9], s=96, c='k', marker='^', label='exp. run 2')
@@ -39,6 +41,8 @@ for k, hour, ki, kj in zip(range(1, 5), [48, 72, 96, 120], [0, 0, 1, 1], [1, 2, 
     meanA_fore = np.mean(A[:8, :], axis=0) 
 
     for i in range(numGroups):
+        if i == 4:
+            continue
         axs[ki][kj].scatter(meanA_exp[i],  meanA_fore[i], s=96, c=colors[i])
     axs[ki][kj].scatter(meanA_exp[8],  meanA_fore[8], s=96, c='k', marker='d')
     axs[ki][kj].scatter(meanA_exp[9],  meanA_fore[9], s=96, c='k', marker='^')

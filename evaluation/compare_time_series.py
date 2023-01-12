@@ -27,9 +27,11 @@ def addExpData(fileName, ax, numFields=1, fieldIdx=0):
     meanvalues = np.mean(interpolateddata, axis=0)
     std = np.std(interpolateddata, axis=0)
 
-    ax.plot(60*ls, meanvalues, color='k', linewidth=2, label="exp. mean")
-    ax.fill_between(60*ls, meanvalues-std, meanvalues+std, color="gray")
+    e1, = ax.plot(ls, meanvalues, color='k', linewidth=3, label="experiment")
+    e2 = ax.fill_between(ls, meanvalues-std, meanvalues+std, color="gray")
     ax.grid(True, which="both")
+
+    return (e1, e2)
 
 def compareTimeSeries():
     """Compare time series for the FluidFlower benchmark"""
@@ -56,12 +58,8 @@ def compareTimeSeries():
             'size' : 14}
     matplotlib.rc('font', **font)
 
-    figP, axsP = plt.subplots(1, 2, figsize=(12, 4))
-    figPT, axsPT = plt.subplots(1, 2, figsize=(12, 4))
     figA, axsA = plt.subplots(2, 2, figsize=(14, 9))
-    figB, axsB = plt.subplots(2, 2, figsize=(14, 9))
-    figC, axsC = plt.subplots(figsize=(6, 4))
-    figT, axsT = plt.subplots(figsize=(6, 4))
+    figBC, axsBC = plt.subplots(1, 2, figsize=(14, 4.5))
 
     fMobileA = []
     fDissolvedA = []
@@ -79,7 +77,7 @@ def compareTimeSeries():
 
         csvData = np.genfromtxt(fileName, delimiter=',', skip_header=skip_header)
 
-        t = csvData[:, 0]/60
+        t = csvData[:, 0]/3600
         minT = max(minT, t[0])
         maxT = min(maxT, t[-1])
 
@@ -93,42 +91,33 @@ def compareTimeSeries():
 
     interpMobileA = list(map(methodcaller('__call__', ls), fMobileA))
     medianMobileA = np.median(interpMobileA, axis=0)
-    stdMobileA = np.std(interpMobileA, axis=0)
-    axsA[0][0].plot(ls, medianMobileA, color='r', linewidth=2, label="forecast")
-    axsA[0][0].fill_between(ls, medianMobileA-stdMobileA, medianMobileA+stdMobileA, color="xkcd:pale pink")
+    q1MobileA = np.percentile(interpMobileA, 25, axis=0)
+    q3MobileA = np.percentile(interpMobileA, 75, axis=0)
+    p2 = axsA[0][0].fill_between(ls, q1MobileA, q3MobileA, color="xkcd:pale brown", label="forecast")
 
     interpDissolvedA = list(map(methodcaller('__call__', ls), fDissolvedA))
     medianDissolvedA = np.median(interpDissolvedA, axis=0)
-    stdDissolvedA = np.std(interpDissolvedA, axis=0)
-    axsA[1][0].plot(ls, medianDissolvedA, color='r', linewidth=2, label="forecast")
-    axsA[1][0].fill_between(ls, medianDissolvedA-stdDissolvedA, medianDissolvedA+stdDissolvedA, color="xkcd:pale pink")
+    q1DissolvedA = np.percentile(interpDissolvedA, 25, axis=0)
+    q3DissolvedA = np.percentile(interpDissolvedA, 75, axis=0)
+    axsA[1][0].fill_between(ls, q1DissolvedA, q3DissolvedA, color="xkcd:pale brown")
 
     interpSealA = list(map(methodcaller('__call__', ls), fSealA))
     medianSealA = np.median(interpSealA, axis=0)
-    stdSealA = np.std(interpSealA, axis=0)
-    axsA[1][1].plot(ls, medianSealA, color='r', linewidth=2, label="forecast")
-    axsA[1][1].fill_between(ls, medianSealA-stdSealA, medianSealA+stdSealA, color="xkcd:pale pink")
+    q1SealA = np.percentile(interpSealA, 25, axis=0)
+    q3SealA = np.percentile(interpSealA, 75, axis=0)
+    axsA[1][1].fill_between(ls, q1SealA, q3SealA, color="xkcd:pale brown")
 
     interpDissolvedB = list(map(methodcaller('__call__', ls), fDissolvedB))
     medianDissolvedB = np.median(interpDissolvedB, axis=0)
-    stdDissolvedB = np.std(interpDissolvedB, axis=0)
-    axsB[1][0].plot(ls, medianDissolvedB, color='r', linewidth=2, label="forecast")
-    axsB[1][0].fill_between(ls, medianDissolvedB-stdDissolvedB, medianDissolvedB+stdDissolvedB, color="xkcd:pale pink")
+    q1DissolvedB = np.percentile(interpDissolvedB, 25, axis=0)
+    q3DissolvedB = np.percentile(interpDissolvedB, 75, axis=0)
+    q2 = axsBC[0].fill_between(ls, q1DissolvedB, q3DissolvedB, color="xkcd:pale brown")
 
     interpMixingC = list(map(methodcaller('__call__', ls), fMixingC))
     medianMixingC = np.median(interpMixingC, axis=0)
-    stdMixingC = np.std(interpMixingC, axis=0)
-    axsC.plot(ls, medianMixingC, color='r', linewidth=2, label="forecast")
-    axsC.fill_between(ls, medianMixingC-stdMixingC, medianMixingC+stdMixingC, color="xkcd:pale pink")
-
-    addExpData("../../experiment/benchmarkdata/time_series/mobile_box_a.csv", axsA[0][0])
-    axsA[0][0].set_xscale("log")
-    addExpData("../../experiment/benchmarkdata/time_series/dissolved_boxes_a_b.csv", axsA[1][0], numFields=2, fieldIdx=0)
-    addExpData("../../experiment/benchmarkdata/time_series/dissolved_box_a_seal.csv", axsA[1][1])
-    addExpData("../../experiment/benchmarkdata/time_series/dissolved_boxes_a_b.csv", axsB[1][0], numFields=2, fieldIdx=1)
-    axsB[1][0].set_xscale("log")
-    addExpData("../../experiment/benchmarkdata/time_series/mixing_box_c.csv", axsC)
-    axsC.set_xscale("log")
+    q1MixingC = np.percentile(interpMixingC, 25, axis=0)
+    q3MixingC = np.percentile(interpMixingC, 75, axis=0)
+    axsBC[1].fill_between(ls, q1MixingC, q3MixingC, color="xkcd:pale brown")
 
     for fileName, group, color in zip(fileNames, groups, colors):
         print(f'Processing {fileName}.')
@@ -141,115 +130,77 @@ def compareTimeSeries():
         delimiter = ','
 
         csvData = np.genfromtxt(fileName, delimiter=delimiter, skip_header=skip_header)
-        t = csvData[:, 0]/60
+        t = csvData[:, 0]/3600
 
-        axsP[0].plot(t, csvData[:, 1]/1e5, label=group, color=color)
-        axsP[0].set_title('sensor 1')
-        axsP[0].set_xlabel('time [min]')
-        axsP[0].set_ylabel('pressure [bar]')
-        axsP[0].set_ylim(1.09e0, 1.15e0)
-        axsP[0].set_xlim(-1.0, 7260.0)
-
-        axsP[1].plot(t, csvData[:, 2]/1e5, label=group, color=color)
-        axsP[1].set_title('sensor 2')
-        axsP[1].set_xlabel('time [min]')
-        axsP[1].set_ylim(1.03e0, 1.09e0)
-        axsP[1].set_xlim(-1.0, 7260.0)
-
-        axsPT[0].plot(t, csvData[:, 1]/1e5, label=group, color=color)
-        axsPT[0].set_title('sensor 1')
-        axsPT[0].set_xlabel('time [min]')
-        axsPT[0].set_ylabel('pressure [bar]')
-        axsPT[0].set_xlim(-0.1, 610.0)
-        axsPT[0].set_ylim(1.09e0, 1.15e0)
-
-        axsPT[1].plot(t, csvData[:, 2]/1e5, label=group, color=color)
-        axsPT[1].set_title('sensor 2')
-        axsPT[1].set_xlabel('time [min]')
-        axsPT[1].set_xlim(-0.1, 610.0)
-        axsPT[1].set_ylim(1.03e0, 1.09e0)
-
-#        axsA[0, 0].plot(t, 1e3*csvData[:, 3], label=group, color=color)
+        axsA[0, 0].plot(t, 1e3*csvData[:, 3], label=group, color=color)
         axsA[0, 0].set_title('mobile')
         axsA[0, 0].set_ylabel('CO2 [g]')
-        axsA[0, 0].set_xlim(5.0, 7260.0)
+        axsA[0, 0].set_xlim(0.1, 121.0)
         axsA[0, 0].set_ylim(-0.1, 3.0)
 
-        axsA[0, 1].plot(t, 1e3*csvData[:, 4], label=group, color=color)
-        axsA[0, 1].set_title('immobile')
-        axsA[0, 1].set_xlim(-1.0, 7260.0)
-        axsA[0, 1].set_ylim(-0.01, 0.3)
+        axsA[0, 1].set_axis_off()
 
         axsA[1, 0].plot(t, 1e3*csvData[:, 5], label=group, color=color)
         axsA[1, 0].set_title('dissolved')
-        axsA[1, 0].set_xlabel('time [min]')
+        axsA[1, 0].set_xlabel('time [h]')
         axsA[1, 0].set_ylabel('CO2 [g]')
-        axsA[1, 0].set_xlim(-1.0, 7260.0)
+        axsA[1, 0].set_xlim(0.1, 121.0)
         axsA[1, 0].set_ylim(-0.01, 6.0)
 
         axsA[1, 1].plot(t, 1e3*csvData[:, 6], label=group, color=color)
         axsA[1, 1].set_title('seal')
-        axsA[1, 1].set_xlabel('time [min]')
-        axsA[1, 1].set_xlim(-1.0, 7260.0)
+        axsA[1, 1].set_xlabel('time [h]')
+        axsA[1, 1].set_xlim(0.1, 121.0)
         axsA[1, 1].set_ylim(-0.01, 1.0)
 
-        axsB[0, 0].plot(t, 1e3*csvData[:, 7], label=group, color=color)
-        axsB[0, 0].set_title('mobile')
-        axsB[0, 0].set_ylabel('CO2 [g]')
-        axsB[0, 0].set_xlim(-1.0, 7260.0)
-        axsB[0, 0].set_ylim(-0.01, 0.6)
+        axsBC[0].plot(t, 1e3*csvData[:, 9], label=group, color=color)
+        axsBC[0].set_title('dissolved in Box B')
+        axsBC[0].set_xlabel('time [h]')
+        axsBC[0].set_ylabel('CO2 [g]')
+        axsBC[0].set_xlim(3.0, 121.0)
+        axsBC[0].set_ylim(-0.01, 2.5)
 
-        axsB[0, 1].plot(t, 1e3*csvData[:, 8], label=group, color=color)
-        axsB[0, 1].set_title('immobile')
-        axsB[0, 1].set_xlim(-1.0, 7260.0)
-        axsB[0, 1].set_ylim(-0.001, 0.07)
+        axsBC[1].plot(t, csvData[:, 11], label=group, color=color)
+        axsBC[1].set_title('convection in Box C')
+        axsBC[1].set_xlabel('time [h]')
+        axsBC[1].set_ylabel('M [m]')
+        axsBC[1].set_xlim(1.0, 121.0)
 
-        axsB[1, 0].plot(t, 1e3*csvData[:, 9], label=group, color=color)
-        axsB[1, 0].set_title('dissolved')
-        axsB[1, 0].set_xlabel('time [min]')
-        axsB[1, 0].set_ylabel('CO2 [g]')
-        axsB[1, 0].set_xlim(200.0, 7260.0)
-        axsB[1, 0].set_ylim(-0.01, 2.5)
+    (e1, e2) = addExpData("../../experiment/benchmarkdata/time_series/mobile_box_a.csv", axsA[0][0])
+    axsA[0][0].set_xscale("log")
+    addExpData("../../experiment/benchmarkdata/time_series/dissolved_boxes_a_b.csv", axsA[1][0], numFields=2, fieldIdx=0)
+    axsA[1][0].set_xscale("log")
+    addExpData("../../experiment/benchmarkdata/time_series/dissolved_box_a_seal.csv", axsA[1][1])
+    axsA[1][1].set_xscale("log")
+    (f1, f2) = addExpData("../../experiment/benchmarkdata/time_series/dissolved_boxes_a_b.csv", axsBC[0], numFields=2, fieldIdx=1)
+    axsBC[0].set_xscale("log")
+    addExpData("../../experiment/benchmarkdata/time_series/mixing_box_c.csv", axsBC[1])
+    axsBC[1].set_xscale("log")
 
-        axsB[1, 1].plot(t, 1e3*csvData[:, 10], label=group, color=color)
-        axsB[1, 1].set_title('seal')
-        axsB[1, 1].set_xlabel('time [min]')
-        axsB[1, 1].set_xlim(-1.0, 7260.0)
-        axsB[1, 1].set_ylim(-0.01, 0.6)
-
-        axsC.plot(t, csvData[:, 11], label=group, color=color)
-        axsC.set_title('convection in Box C')
-        axsC.set_xlabel('time [min]')
-        axsC.set_ylabel('M [m]')
-        axsC.set_xlim(5.0, 7260.0)
-        axsC.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-
-        axsT.plot(t, 1e3*csvData[:, 12], label=group, color=color)
-        axsT.set_title('total CO2 mass')
-        axsT.set_xlabel('time [min]')
-        axsT.set_ylabel('mass [g]')
-        axsT.set_xlim(-1.0, 7260.0)
-        axsT.set_ylim(-0.01, 10.0)
-        axsT.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-
-    handles, labels = axsP[1].get_legend_handles_labels()
-    figP.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=5)
-    figP.savefig('time_series_pressure.png', bbox_inches='tight')
-
-    handles, labels = axsPT[1].get_legend_handles_labels()
-    figPT.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=5)
-    figPT.savefig('time_series_pressure_zoom_time.png', bbox_inches='tight')
-
+    p1, = axsA[0][0].plot(ls, medianMobileA, color="xkcd:brown", linewidth=3, label="forecast")
+    axsA[1][0].plot(ls, medianDissolvedA, color="xkcd:brown", linewidth=3, label="forecast")
+    axsA[1][1].plot(ls, medianSealA, color="xkcd:brown", linewidth=3, label="forecast")
     handles, labels = axsA[0][0].get_legend_handles_labels()
-    figA.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.01), ncol=5)
-    figA.savefig('time_series_boxA.png', bbox_inches='tight')
+    by_label = dict(zip(labels, handles))
+    del by_label["forecast"]
+    by_label["forecast"] = (p2, p1)
+    del by_label["experiment"]
+    by_label["experiment"] = (e2, e1)
+    figA.legend(by_label.values(), by_label.keys(), loc='upper right', bbox_to_anchor=(0.85, 0.8), ncol=2)
+    # figA.legend(((handles), ((p2, p1), )), ((labels), ("forecast", )), loc='upper right', bbox_to_anchor=(0.85, 0.8), ncol=2)
+    figA.savefig('compare_time_series_boxA.png', bbox_inches='tight')
 
-    handles, labels = axsB[1][1].get_legend_handles_labels()
-    figB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.01), ncol=5)
-    figB.savefig('time_series_boxB.png', bbox_inches='tight')
+    q1, = axsBC[0].plot(ls, medianDissolvedB, color="xkcd:brown", linewidth=3, label="forecast")
+    axsBC[1].plot(ls, medianMixingC, color="xkcd:brown", linewidth=3, label="forecast")
+    handles, labels = axsBC[0].get_legend_handles_labels()
+    by_label = dict(zip(labels, handles))
+    del by_label["forecast"]
+    by_label["forecast"] = (q2, q1)
+    del by_label["experiment"]
+    by_label["experiment"] = (f2, f1)
+    figBC.legend(by_label.values(), by_label.keys(), loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=6)
+    figBC.savefig('compare_time_series_boxBC.png', bbox_inches='tight')
 
-    figC.savefig('time_series_boxC.png', bbox_inches='tight')
-    figT.savefig('time_series_co2mass.png', bbox_inches='tight')
 
 if __name__ == "__main__":
     compareTimeSeries()
