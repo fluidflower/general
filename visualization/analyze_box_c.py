@@ -28,6 +28,10 @@ def analyzeBoxC():
             'weight' : 'normal',
             'size' : 14}
     matplotlib.rc('font', **font)
+    plt.rcParams.update({
+        "text.usetex": True,
+        "font.family": "monospace",
+    })
 
     figC, axsC = plt.subplots(figsize=(6, 4))
 
@@ -51,14 +55,14 @@ def analyzeBoxC():
         axsC.plot([13059/60/60, 13059/60/60], [-0.1, 0.36], color='C7', linestyle='dashed')
         axsC.plot([13500/60/60, 13500/60/60], [-0.1, 1.672570], color='C8', linestyle='dashed')
         axsC.plot([33933/60/60, 33933/60/60], [-0.1, 1.56], color='C9', linestyle='dashed')
-        axsC.set_title('convection in Box C')
-        axsC.set_xlabel('time [h]')
-        axsC.set_ylabel('M [m]')
+        axsC.set_title(r'\textrm{\textbf{\Large Box C: convection}}')
+        axsC.set_xlabel(r'\textrm{time [h]}')
+        axsC.set_ylabel(r'\textrm{$M$ [m]}')
         axsC.set_xlim(0, 10.0)
         axsC.set_ylim(-0.1, 2.5)
         axsC.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
-    figC.savefig('analyze_boxC.png', bbox_inches='tight')
+    figC.savefig('analyze_boxC.pdf', bbox_inches='tight')
 
 if __name__ == "__main__":
     analyzeBoxC()

@@ -131,7 +131,7 @@ def assembleTimeSeries():
         axsC.plot(t, csvData[:, 11], label=group, color=color)
         axsC.set_title(r'\textrm{\textbf{\large Box C: convection}}')
         axsC.set_xlabel(r'\textrm{time [h]}')
-        axsC.set_ylabel(r'\textrm{M [m]}')
+        axsC.set_ylabel(r'\textrm{$M$ [m]}')
         axsC.set_xlim(-1.0/60, 7260.0/60)
         axsC.legend(loc='center left', bbox_to_anchor=(1, 0.5))
 
@@ -145,22 +145,22 @@ def assembleTimeSeries():
 
     handles, labels = axsP[1].get_legend_handles_labels()
     figP.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=5)
-    figP.savefig('time_series_pressure.png', bbox_inches='tight')
+    figP.savefig('time_series_pressure.pdf', bbox_inches='tight')
 
     handles, labels = axsPT[1].get_legend_handles_labels()
     figPT.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=5)
-    figPT.savefig('time_series_pressure_zoom_time.png', bbox_inches='tight')
+    figPT.savefig('time_series_pressure_zoom_time.pdf', bbox_inches='tight')
 
     handles, labels = axsA[1][1].get_legend_handles_labels()
     figA.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.01), ncol=5)
-    figA.savefig('time_series_boxA.png', bbox_inches='tight')
+    figA.savefig('time_series_boxA.pdf', bbox_inches='tight')
 
     handles, labels = axsB[1][1].get_legend_handles_labels()
     figB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.01), ncol=5)
-    figB.savefig('time_series_boxB.png', bbox_inches='tight')
+    figB.savefig('time_series_boxB.pdf', bbox_inches='tight')
 
-    figC.savefig('time_series_boxC.png', bbox_inches='tight')
-    figT.savefig('time_series_co2mass.png', bbox_inches='tight')
+    figC.savefig('time_series_boxC.pdf', bbox_inches='tight')
+    figT.savefig('time_series_co2mass.pdf', bbox_inches='tight')
 
 if __name__ == "__main__":
     assembleTimeSeries()

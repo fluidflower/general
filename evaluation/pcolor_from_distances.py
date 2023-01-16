@@ -72,4 +72,4 @@ for (i,j), value in np.ndenumerate(A):
         axs[1].text(numGroups-1-i-0.5, numGroups-1-j-0.5, f'{int(value):03d}', ha='center', va='center')
 axs[1].set_title(r"\textrm{\textbf{120 hours}}")
 
-fig.savefig(f"pcolor_distances.png", bbox_inches='tight')
+fig.savefig(f"pcolor_distances.pdf", bbox_inches='tight')

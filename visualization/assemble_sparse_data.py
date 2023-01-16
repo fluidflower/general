@@ -66,6 +66,10 @@ def assembleSparseData():
             'weight' : 'normal',
             'size' : 14}
     matplotlib.rc('font', **font)
+    plt.rcParams.update({
+        "text.usetex": True,
+        "font.family": "monospace",
+    })
 
     figP, axsP = plt.subplots(2, 1, figsize=(12, 8))
     figT, axsT = plt.subplots(2, 1, figsize=(12, 8))
@@ -86,23 +90,36 @@ def assembleSparseData():
         skip_footer = 0
 
         csvData = np.genfromtxt(fileName, delimiter=delimiter, skip_header=skip_header, skip_footer=skip_footer)
-        visualizeRow(csvData[0]/1e5, axsP[0], '1a: sensor 1', 'pressure [bar]', group, color, offset)
-        visualizeRow(csvData[1]/1e5, axsP[1], '1b: sensor 2', 'pressure [bar]', group, color, offset)
+        visualizeRow(csvData[0]/1e5, axsP[0], r'\textrm{\textbf{\Large 1a: expected maximum pressure at sensor 1}}',
+                     r'\textrm{pressure [bar]}', group, color, offset)
+        visualizeRow(csvData[1]/1e5, axsP[1], r'\textrm{\textbf{\Large 1b: expected maximum pressure at sensor 2}}',
+                     r'\textrm{pressure [bar]}', group, color, offset)
 
-        visualizeRow(csvData[2]/60/60, axsT[0], '2: max mobile free phase in Box A', 'time [h]', group, color, offset)
-        visualizeRow(csvData[11]/60/60, axsT[1], '5: M exceeds 110% of Box C’s width', 'time [h]', group, color, offset)
+        visualizeRow(csvData[2]/60/60, axsT[0], r'\textrm{\textbf{\Large 2: maximum mobile gaseous CO$_2$ in Box A}}',
+                     r'\textrm{time [h]}', group, color, offset)
+        visualizeRow(csvData[11]/60/60, axsT[1], r'\textrm{\textbf{\Large 5: $M(t)$ exceeds 110\% of Box C’s width}}',
+                     r'\textrm{time [h]}', group, color, offset)
 
-        visualizeRow(1e3*csvData[3], axsA[0, 0], '3a: mobile free phase', 'mass [g]', group, color, offset)
-        visualizeRow(1e3*csvData[4], axsA[0, 1], '3b: immobile free phase', 'mass [g]', group, color, offset)
-        visualizeRow(1e3*csvData[5], axsA[1, 0], '3c: dissolved in water', 'mass [g]', group, color, offset)
-        visualizeRow(1e3*csvData[6], axsA[1, 1], '3d: seal', 'mass [g]', group, color, offset)
+        visualizeRow(1e3*csvData[3], axsA[0, 0], r'\textrm{\textbf{\Large 3a: mobile gaseous CO$_2$ in Box A at 72\,h}}',
+                     r'\textrm{mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[4], axsA[0, 1], r'\textrm{\textbf{\Large 3b: immobile gaseous CO$_2$ in Box A at 72\,h}}',
+                     r'\textrm{mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[5], axsA[1, 0], r'\textrm{\textbf{\Large 3c: CO$_2$ dissolved in liquid phase in Box A at 72\,h}}',
+                     r'\textrm{mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[6], axsA[1, 1], r'\textrm{\textbf{\Large 3d: CO$_2$ in the seal facies in Box A at 72\,h}}',
+                     r'\textrm{mass [g]}', group, color, offset)
 
-        visualizeRow(1e3*csvData[7], axsB[0, 0], '4a: mobile free phase', 'mass [g]', group, color, offset)
-        visualizeRow(1e3*csvData[8], axsB[0, 1], '4b: immobile free phase', 'mass [g]', group, color, offset)
-        visualizeRow(1e3*csvData[9], axsB[1, 0], '4c: dissolved in water', 'mass [g]', group, color, offset)
-        visualizeRow(1e3*csvData[10], axsB[1, 1], '4d: seal', 'mass [g]', group, color, offset)
+        visualizeRow(1e3*csvData[7], axsB[0, 0], r'\textrm{\textbf{\Large 4a: mobile gaseous CO$_2$ in Box B at 72\,h}}',
+                     r'\textrm{mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[8], axsB[0, 1], r'\textrm{\textbf{\Large 4b: immobile gaseous CO$_2$ in Box B at 72\,h}}',
+                     r'\textrm{mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[9], axsB[1, 0], r'\textrm{\textbf{\Large 4c: CO$_2$ dissolved in liquid phase in Box B at 72\,h}}',
+                     r'\textrm{mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[10], axsB[1, 1], r'\textrm{\textbf{\Large 4d: CO$_2$ in the seal facies in Box B at 72\,h}}',
+                     r'\textrm{mass [g]}', group, color, offset)
 
-        visualizeRow(1e3*csvData[12], axsS, '6: total CO2 mass in top seal facies', 'mass [g]', group, color, offset)
+        visualizeRow(1e3*csvData[12], axsS, r'\textrm{\textbf{\Large 6: total CO$_2$ mass in top seal facies in Box A at 120\,h}}',
+                     r'\textrm{mass [g]}', group, color, offset)
 
         offset = offset + 2.0
 
@@ -134,11 +151,11 @@ def assembleSparseData():
     figB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.02), ncol=5)
 
     figP.tight_layout()
-    figP.savefig('sparse_data_pressure.png', bbox_inches='tight')
-    figT.savefig('sparse_data_time.png', bbox_inches='tight')
-    figA.savefig('sparse_data_boxA.png', bbox_inches='tight')
-    figB.savefig('sparse_data_boxB.png', bbox_inches='tight')
-    figS.savefig('sparse_data_seal.png', bbox_inches='tight')
+    figP.savefig('sparse_data_pressure.pdf', bbox_inches='tight')
+    figT.savefig('sparse_data_time.pdf', bbox_inches='tight')
+    figA.savefig('sparse_data_boxA.pdf', bbox_inches='tight')
+    figB.savefig('sparse_data_boxB.pdf', bbox_inches='tight')
+    figS.savefig('sparse_data_seal.pdf', bbox_inches='tight')
 
 if __name__ == "__main__":
     assembleSparseData()
