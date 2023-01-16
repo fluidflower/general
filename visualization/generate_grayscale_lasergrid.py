@@ -29,29 +29,30 @@ def getFieldValues(fileName, nX, nY):
             skip_header = 1
 
     csvData = np.genfromtxt(fileName, delimiter=',', skip_header=skip_header)
-    for i in np.arange(0, nY):
-        # Shift in x-direction as 6 more values have been reported,
-        # 3 to the left and 3 to the right.
-        # Analogously, shift in y-direction and
-        # start with the fourth reported row of values due to the offset
-        # between the lasergrid and the model coordinate system.
-        saturation[i, :] = csvData[(i+3)*(nX+6)+3:(i+4)*(nX+6)-3, 2]
-        concentration[i, :] = csvData[(i+3)*(nX+6)+3:(i+4)*(nX+6)-3, 3]
+    # Treat results from Heriot-Watt in a special way, as they are
+    # reported with respect to the laser grid already.
+    if 'watt' in fileName:
+        for i in np.arange(0, nY):
+            saturation[i, :] = csvData[i*nX:(i+1)*nX, 2]
+            concentration[i, :] = csvData[i*nX:(i+1)*nX, 3]
+    else:
+        for i in np.arange(0, nY):
+            # Shift in x-direction as 6 more values have been reported,
+            # 3 to the left and 3 to the right.
+            # Analogously, shift in y-direction and
+            # start with the fourth reported row of values due to the offset
+            # between the lasergrid and the model coordinate system.
+            saturation[i, :] = csvData[(i+3)*(nX+6)+3:(i+4)*(nX+6)-3, 2]
+            concentration[i, :] = csvData[(i+3)*(nX+6)+3:(i+4)*(nX+6)-3, 3]
 
     return saturation, concentration
 
-def plotColorMesh(fig, x, y, z, fieldName, outFileName):
+def plotColorMesh(fig, x, y, z, outFileName):
     ax = fig.gca()
     vmin = 0.0
-    if fieldName == 'sat':
-        vmax = 1.0
-    else:
-        vmax = 1.8
+    vmax = 1.8
 
-    if fieldName == 'sat' or fieldName == 'con':
-        im = ax.pcolormesh(x, y, z, shading='flat', cmap='coolwarm', vmin=vmin, vmax=vmax)
-    else:
-        im = ax.pcolormesh(x, y, z, shading='flat', cmap='gist_gray', vmin=vmin, vmax=vmax)
+    im = ax.pcolormesh(x, y, z, shading='flat', cmap='gist_gray', vmin=vmin, vmax=vmax)
     ax.axis([x.min(), x.max(), y.min(), y.max()])
     ax.axis('scaled')
     plt.axis('off')
@@ -71,16 +72,6 @@ def generateGrayScale():
                         help="The csv file to visualize. Defaults to \"spatial_map_24h.csv\".")
     parser.add_argument("-out", "--outfilename", default="spatial_map_grayscale.png",
                         help="The output image file name. Defaults to \"spatial_map_grayscale.png\".")
-    parser.add_argument("-field", "--field", default="both",
-                        help="The field to be plotted, \"sat\" or \"con\" or \"both\". Defaults to \"both\".")
-    parser.add_argument("-xmin", "--xmin", type=float, default=0.0,
-                        help="The minimum x value of the domain. Defaults to 0.0.")
-    parser.add_argument("-xmax", "--xmax", type=float, default=2.86,
-                        help="The maximum x value of the domain. Defaults to 2.86.")
-    parser.add_argument("-ymin", "--ymin", type=float, default=0.0,
-                        help="The minimum y value of the domain. Defaults to 0.0.")
-    parser.add_argument("-ymax", "--ymax", type=float, default=1.23,
-                        help="The maximum y value of the domain. Defaults to 1.23.")
 
     cmdArgs = vars(parser.parse_args())
 
@@ -100,17 +91,11 @@ def generateGrayScale():
 
     saturation, concentration = getFieldValues(inFileName, nX, nY)
 
-    fieldName = cmdArgs["field"]
     outFileName = cmdArgs["outfilename"]
-    if fieldName == "sat":
-        plotColorMesh(fig, x, y, saturation, fieldName, outFileName)
-    elif fieldName == "con":
-        plotColorMesh(fig, x, y, concentration, fieldName, outFileName)
-    else:
-        # The formula approximates the mass of CO2 in a cell by adding
-        # the contributions from the gaseous and the liquid phase.
-        # The factor '2.0' is the approximate density of CO2.
-        plotColorMesh(fig, x, y, 2.0*saturation + concentration*(1.0 - saturation), fieldName, outFileName)
+    # The formula approximates the mass of CO2 in a cell by adding
+    # the contributions from the gaseous and the liquid phase.
+    # The factor '2.0' is the approximate density of CO2.
+    plotColorMesh(fig, x, y, 2.0*saturation + concentration*(1.0 - saturation), outFileName)
 
 if __name__ == "__main__":
     generateGrayScale()
