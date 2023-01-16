@@ -13,8 +13,8 @@ plt.rcParams.update({
     "legend.handlelength": 1.0
 })
 
-groups = ["Austin", "CSIRO", "Delft-DARSim", "Delft-DARTS", "LANL", "Melbourne", "Stanford", "Stuttgart"]
-colors = ["C0", "C1", "C2", "C3", "C6", "C7", "C8", "C9"]
+groups = ["Austin", "CSIRO", "Delft-DARSim", "Delft-DARTS", "Heriot-Watt", "LANL", "Melbourne", "Stanford", "Stuttgart"]
+colors = ["C0", "C1", "C2", "C3", "C4", "C6", "C7", "C8", "C9"]
 
 numGroups = len(groups)
 numExps = 5
@@ -26,20 +26,20 @@ fig, axs = plt.subplots(2, 3, figsize=(9, 6))
 
 # The calculated distances have the unit of normalized mass times meter.
 # Multiply by 8.5, the injected mass of CO2 in g, and 100, to convert to g.cm.
-A = 850*distances[:13, :13]
+A = 850*distances[:numGroupsPlusExps, :numGroupsPlusExps]
 
-meanA_exp = np.mean(A[8:, :], axis=0) 
-meanA_fore = np.mean(A[:8, :], axis=0) 
+meanA_exp = np.mean(A[numGroups:, :], axis=0) 
+meanA_fore = np.mean(A[:numGroups, :], axis=0) 
 
 for i in range(numGroups):
-    if i == 4:
+    if i == 5:
         continue
     axs[0][0].scatter(meanA_exp[i],  meanA_fore[i], s=96, c=colors[i], label=groups[i])
-axs[0][0].scatter(meanA_exp[8],  meanA_fore[8], s=96, c='k', marker='d', label=r'\textrm{exp. run 1}')
-axs[0][0].scatter(meanA_exp[9],  meanA_fore[9], s=96, c='k', marker='^', label=r'\textrm{exp. run 2}')
-axs[0][0].scatter(meanA_exp[10],  meanA_fore[10], s=96, c='k', marker='>', label=r'\textrm{exp. run 3}')
-axs[0][0].scatter(meanA_exp[11],  meanA_fore[11], s=96, c='k', marker='v', label=r'\textrm{exp. run 4}')
-axs[0][0].scatter(meanA_exp[12],  meanA_fore[12], s=96, c='k', marker='<', label=r'\textrm{exp. run 5}')
+axs[0][0].scatter(meanA_exp[numGroups],  meanA_fore[numGroups], s=96, c='k', marker='d', label=r'\textrm{exp. run 1}')
+axs[0][0].scatter(meanA_exp[numGroups+1],  meanA_fore[numGroups+1], s=96, c='k', marker='^', label=r'\textrm{exp. run 2}')
+axs[0][0].scatter(meanA_exp[numGroups+2],  meanA_fore[numGroups+2], s=96, c='k', marker='>', label=r'\textrm{exp. run 3}')
+axs[0][0].scatter(meanA_exp[numGroups+3],  meanA_fore[numGroups+3], s=96, c='k', marker='v', label=r'\textrm{exp. run 4}')
+axs[0][0].scatter(meanA_exp[numGroups+4],  meanA_fore[numGroups+4], s=96, c='k', marker='<', label=r'\textrm{exp. run 5}')
 axs[0][0].set_title(r'\textrm{\textbf{24 h}}')
 axs[0][0].set_xlim((-0.05*850, 0.65*850))
 axs[0][0].set_ylim((0.1*850, 0.6*850))
@@ -48,18 +48,18 @@ axs[0][0].set_ylim((0.1*850, 0.6*850))
 for k, hour, ki, kj in zip(range(1, 5), [48, 72, 96, 120], [0, 0, 1, 1], [1, 2, 0, 1]):
     A = 850*distances[k*numGroupsPlusExps:(k+1)*numGroupsPlusExps, k*numGroupsPlusExps:(k+1)*numGroupsPlusExps]
 
-    meanA_exp = np.mean(A[8:, :], axis=0) 
-    meanA_fore = np.mean(A[:8, :], axis=0) 
+    meanA_exp = np.mean(A[numGroups:, :], axis=0) 
+    meanA_fore = np.mean(A[:numGroups, :], axis=0)*8/7 # take correct avg due to missing HW data
 
     for i in range(numGroups):
-        if i == 4:
+        if i == 5 or (i == 4 and hour > 48):
             continue
         axs[ki][kj].scatter(meanA_exp[i],  meanA_fore[i], s=96, c=colors[i])
-    axs[ki][kj].scatter(meanA_exp[8],  meanA_fore[8], s=96, c='k', marker='d')
-    axs[ki][kj].scatter(meanA_exp[9],  meanA_fore[9], s=96, c='k', marker='^')
-    axs[ki][kj].scatter(meanA_exp[10],  meanA_fore[10], s=96, c='k', marker='>')
-    axs[ki][kj].scatter(meanA_exp[11],  meanA_fore[11], s=96, c='k', marker='v')
-    axs[ki][kj].scatter(meanA_exp[12],  meanA_fore[12], s=96, c='k', marker='<')
+    axs[ki][kj].scatter(meanA_exp[numGroups],  meanA_fore[numGroups], s=96, c='k', marker='d')
+    axs[ki][kj].scatter(meanA_exp[numGroups+1],  meanA_fore[numGroups+1], s=96, c='k', marker='^')
+    axs[ki][kj].scatter(meanA_exp[numGroups+2],  meanA_fore[numGroups+2], s=96, c='k', marker='>')
+    axs[ki][kj].scatter(meanA_exp[numGroups+3],  meanA_fore[numGroups+3], s=96, c='k', marker='v')
+    axs[ki][kj].scatter(meanA_exp[numGroups+4],  meanA_fore[numGroups+4], s=96, c='k', marker='<')
     if hour == 48:
         axs[ki][kj].set_title(r'\textrm{\textbf{48 h}}')
     if hour == 72:

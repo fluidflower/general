@@ -9,6 +9,7 @@ sys.path.append('../visualization/')
 import generate_segmented_images as seg
 import argparse
 import numpy as np
+import os.path
 from PIL import Image
 import emd
 
@@ -55,6 +56,7 @@ baseFileNames = ['../../austin/spatial_maps/spatial_map_',
                  '../../csiro/spatial_map_',
                  '../../delft/delft-DARSim/spatial_map_',
                  '../../delft/delft-DARTS/spatial_map_',
+                 '../../heriot-watt/spatial_map_',
                  '../../lanl/spatial_map_',
                  '../../melbourne/spatial_map_',
                  '../../stanford/spatial_maps/spatial_map_',
@@ -66,19 +68,29 @@ numGroupsPlusExps = numGroups + numExps
 distances = np.zeros(((numGroups + numExps)*5, (numGroups + numExps)*5))
 
 for hourI in [24, 48, 72, 96, 120]:
-    for hourJ in [24, 48, 72, 96, 120]:
+    for hourJ in [hourI]: #[24, 48, 72, 96, 120]:
         if hourJ < hourI: continue
 
         for i, baseFileNameI in zip(range(numGroups), baseFileNames):
             fileNameI = baseFileNameI + str(hourI) + 'h.csv'
-            modelResultI = seg.generateSegmentMap(fileNameI, 0.0, 2.86, 0.0, 1.23, cmdArgs["minimumsaturation"], cmdArgs["minimumconcentration"])
+            if (not os.path.exists(fileNameI)): continue
+
+            if 'watt' in fileNameI:
+                modelResultI = seg.generateSegmentMap(fileNameI, 0.03, 2.83, 0.03, 1.23, cmdArgs["minimumsaturation"], cmdArgs["minimumconcentration"])
+            else:
+                modelResultI = seg.generateSegmentMap(fileNameI, 0.0, 2.86, 0.0, 1.23, cmdArgs["minimumsaturation"], cmdArgs["minimumconcentration"])
             row = int((hourI/24 - 1)*numGroupsPlusExps + i)
 
             for j, baseFileNameJ in zip(range(numGroups), baseFileNames):
                 if j <= i and hourJ == hourI: continue
 
                 fileNameJ = baseFileNameJ + str(hourJ) + 'h.csv'
-                modelResultJ = seg.generateSegmentMap(fileNameJ, 0.0, 2.86, 0.0, 1.23, cmdArgs["minimumsaturation"], cmdArgs["minimumconcentration"])
+                if (not os.path.exists(fileNameJ)): continue
+
+                if 'watt' in fileNameJ:
+                    modelResultJ = seg.generateSegmentMap(fileNameJ, 0.03, 2.83, 0.03, 1.23, cmdArgs["minimumsaturation"], cmdArgs["minimumconcentration"])
+                else:
+                    modelResultJ = seg.generateSegmentMap(fileNameJ, 0.0, 2.86, 0.0, 1.23, cmdArgs["minimumsaturation"], cmdArgs["minimumconcentration"])
 
                 col = int((hourJ/24 - 1)*numGroupsPlusExps + j)
                 distances[row][col] = calculateEMD(modelResultI, modelResultJ)
@@ -109,7 +121,12 @@ for hourI in [24, 48, 72, 96, 120]:
                 if j <= i and hourJ == hourI: continue
 
                 fileNameJ = baseFileNameJ + str(hourJ) + 'h.csv'
-                modelResultJ = seg.generateSegmentMap(fileNameJ, 0.0, 2.86, 0.0, 1.23, cmdArgs["minimumsaturation"], cmdArgs["minimumconcentration"])
+                if (not os.path.exists(fileNameJ)): continue
+
+                if 'watt' in fileNameJ:
+                    modelResultJ = seg.generateSegmentMap(fileNameJ, 0.03, 2.83, 0.03, 1.23, cmdArgs["minimumsaturation"], cmdArgs["minimumconcentration"])
+                else:
+                    modelResultJ = seg.generateSegmentMap(fileNameJ, 0.0, 2.86, 0.0, 1.23, cmdArgs["minimumsaturation"], cmdArgs["minimumconcentration"])
 
                 col = int((hourJ/24 - 1)*numGroupsPlusExps + j)
                 distances[row][col] = calculateEMD(experimentalDataI, modelResultJ)
