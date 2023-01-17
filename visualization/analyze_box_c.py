@@ -33,7 +33,7 @@ def analyzeBoxC():
         "font.family": "monospace",
     })
 
-    figC, axsC = plt.subplots(figsize=(6, 4))
+    figC, axsC = plt.subplots(figsize=(5, 3))
 
     for fileName, group, color in zip(fileNames, groups, colors):
         print(f'Processing {fileName}.')

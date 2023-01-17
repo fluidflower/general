@@ -1,5 +1,8 @@
 import cv2
 import numpy as np
+import subprocess
+
+
 def drawline(img,pt1,pt2,color,thickness=1,style='dotted',gap=20):
     dist =((pt1[0]-pt2[0])**2+(pt1[1]-pt2[1])**2)**.5
     pts= []
@@ -91,4 +94,7 @@ cv2.circle(image, obs1, 5, colorObs, 3)
 obs2 = laserGridMMToPixels((170, 110), image.shape)
 cv2.circle(image, obs2, 5, colorObs, 3)
 
-cv2.imwrite('figure_8_improved.png', image)
+cv2.imwrite('temp.png', image)
+subprocess.run(["convert", "temp.png", "-font", "helvetica-bold", "-fill", "\"rgb(0, 164, 255)\"", "-pointsize", "36",
+                "-stroke", "black", "-annotate", "+15+40", "Box B", "figure_8_improved.png"])
+subprocess.run(["rm", "temp.png"])

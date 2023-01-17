@@ -55,15 +55,17 @@ def compareTimeSeries():
 
     font = {'family' : 'normal',
             'weight' : 'normal',
-            'size' : 14}
+            'size' : 16}
     matplotlib.rc('font', **font)
     plt.rcParams.update({
         "text.usetex": True,
         "font.family": "monospace",
+        "legend.columnspacing": 0.9,
+        "legend.handlelength": 1.2
     })
 
-    figA, axsA = plt.subplots(2, 2, figsize=(14, 9))
-    figBC, axsBC = plt.subplots(1, 2, figsize=(14, 4.5))
+    figA, axsA = plt.subplots(2, 2, figsize=(11, 7))
+    figBC, axsBC = plt.subplots(1, 2, figsize=(11, 3.5))
 
     fMobileA = []
     fDissolvedA = []
@@ -137,37 +139,37 @@ def compareTimeSeries():
         t = csvData[:, 0]/3600
 
         axsA[0, 0].plot(t, 1e3*csvData[:, 3], label=group, color=color)
-        axsA[0, 0].set_title(r'\textrm{\textbf{\large Box A: mobile gaseous CO$_2$}}')
-        axsA[0, 0].set_ylabel(r'\textrm{mass [g]}')
+        axsA[0, 0].set_title(r'\textrm{\textbf{\Large Box A: mobile gaseous CO$_2$}}')
+        axsA[0, 0].set_ylabel(r'\textrm{\LARGE mass [g]}')
         axsA[0, 0].set_xlim(0.1, 121.0)
         axsA[0, 0].set_ylim(-0.1, 3.0)
 
         axsA[0, 1].set_axis_off()
 
         axsA[1, 0].plot(t, 1e3*csvData[:, 5], label=group, color=color)
-        axsA[1, 0].set_title(r'\textrm{\textbf{\large Box A: CO$_2$ dissolved in liquid phase}}')
-        axsA[1, 0].set_xlabel(r'\textrm{time [h]}')
-        axsA[1, 0].set_ylabel(r'\textrm{mass [g]}')
+        axsA[1, 0].set_title(r'\textrm{\textbf{\Large Box A: CO$_2$ dissolved in liquid phase}}')
+        axsA[1, 0].set_xlabel(r'\textrm{\LARGE time [h]}')
+        axsA[1, 0].set_ylabel(r'\textrm{\LARGE mass [g]}')
         axsA[1, 0].set_xlim(0.1, 121.0)
         axsA[1, 0].set_ylim(-0.01, 6.0)
 
         axsA[1, 1].plot(t, 1e3*csvData[:, 6], label=group, color=color)
-        axsA[1, 1].set_title(r'\textrm{\textbf{\large Box A: CO$_2$ in the seal facies}}')
-        axsA[1, 1].set_xlabel(r'\textrm{time [h]}')
+        axsA[1, 1].set_title(r'\textrm{\textbf{\Large Box A: CO$_2$ in the seal facies}}')
+        axsA[1, 1].set_xlabel(r'\textrm{\LARGE time [h]}')
         axsA[1, 1].set_xlim(0.1, 121.0)
         axsA[1, 1].set_ylim(-0.01, 1.0)
 
         axsBC[0].plot(t, 1e3*csvData[:, 9], label=group, color=color)
-        axsBC[0].set_title(r'\textrm{\textbf{\large Box B: CO$_2$ dissolved in liquid phase}}')
-        axsBC[0].set_xlabel(r'\textrm{time [h]}')
-        axsBC[0].set_ylabel(r'\textrm{mass [g]}')
+        axsBC[0].set_title(r'\textrm{\textbf{\Large Box B: CO$_2$ dissolved in liquid phase}}')
+        axsBC[0].set_xlabel(r'\textrm{\LARGE time [h]}')
+        axsBC[0].set_ylabel(r'\textrm{\LARGE mass [g]}')
         axsBC[0].set_xlim(3.0, 121.0)
         axsBC[0].set_ylim(-0.01, 2.5)
 
         axsBC[1].plot(t, csvData[:, 11], label=group, color=color)
-        axsBC[1].set_title(r'\textrm{\textbf{\large Box C: convection}}')
-        axsBC[1].set_xlabel(r'\textrm{time [h]}')
-        axsBC[1].set_ylabel(r'\textrm{$M$ [m]}')
+        axsBC[1].set_title(r'\textrm{\textbf{\Large Box C: convection}}')
+        axsBC[1].set_xlabel(r'\textrm{\LARGE time [h]}')
+        axsBC[1].set_ylabel(r'\textrm{\LARGE $M$ [m]}')
         axsBC[1].set_xlim(1.0, 121.0)
 
     (e1, e2) = addExpData("../../experiment/benchmarkdata/time_series/mobile_box_a.csv", axsA[0][0])
@@ -192,8 +194,8 @@ def compareTimeSeries():
     del by_label["experiment"]
     by_label["experiment"] = (e2, e1)
     by_label[r"\textrm{experiment}"] = by_label.pop("experiment")
-    figA.legend(by_label.values(), by_label.keys(), loc='upper right', bbox_to_anchor=(0.85, 0.8), ncol=2)
-    # figA.legend(((handles), ((p2, p1), )), ((labels), ("forecast", )), loc='upper right', bbox_to_anchor=(0.85, 0.8), ncol=2)
+    figA.legend(by_label.values(), by_label.keys(), loc='upper right', bbox_to_anchor=(0.91, 0.85), ncol=2)
+    axsA[0, 0].set_xticklabels([])
     figA.savefig('compare_time_series_boxA.pdf', bbox_inches='tight')
 
     q1, = axsBC[0].plot(ls, medianDissolvedB, color="xkcd:brown", linewidth=3, label="forecast")
@@ -206,7 +208,7 @@ def compareTimeSeries():
     del by_label["experiment"]
     by_label["experiment"] = (f2, f1)
     by_label[r"\textrm{experiment}"] = by_label.pop("experiment")
-    figBC.legend(by_label.values(), by_label.keys(), loc='upper center', bbox_to_anchor=(0.5, 1.13), ncol=6)
+    figBC.legend(by_label.values(), by_label.keys(), loc='upper center', bbox_to_anchor=(0.5, 1.3), ncol=4)
     figBC.savefig('compare_time_series_boxBC.pdf', bbox_inches='tight')
 
 

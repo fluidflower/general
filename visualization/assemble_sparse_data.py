@@ -69,13 +69,15 @@ def assembleSparseData():
     plt.rcParams.update({
         "text.usetex": True,
         "font.family": "monospace",
+        "legend.columnspacing": 1.0,
+        "legend.handlelength": 1.2
     })
 
-    figP, axsP = plt.subplots(2, 1, figsize=(12, 8))
-    figT, axsT = plt.subplots(2, 1, figsize=(12, 8))
-    figA, axsA = plt.subplots(2, 2, figsize=(16, 8))
-    figB, axsB = plt.subplots(2, 2, figsize=(16, 8))
-    figS, axsS = plt.subplots(1, 1, figsize=(12, 5))
+    figP, axsP = plt.subplots(2, 1, figsize=(9, 6))
+    figT, axsT = plt.subplots(2, 1, figsize=(9, 6))
+    figA, axsA = plt.subplots(2, 2, figsize=(12, 6))
+    figB, axsB = plt.subplots(2, 2, figsize=(12, 6))
+    figS, axsS = plt.subplots(1, 1, figsize=(10, 4))
     offset = 0.0
 
     for fileName, group, color in zip(fileNames, groups, colors):
@@ -91,64 +93,68 @@ def assembleSparseData():
 
         csvData = np.genfromtxt(fileName, delimiter=delimiter, skip_header=skip_header, skip_footer=skip_footer)
         visualizeRow(csvData[0]/1e5, axsP[0], r'\textrm{\textbf{\Large 1a: expected maximum pressure at sensor 1}}',
-                     r'\textrm{pressure [bar]}', group, color, offset)
+                     r'\textrm{\LARGE pressure [bar]}', group, color, offset)
         visualizeRow(csvData[1]/1e5, axsP[1], r'\textrm{\textbf{\Large 1b: expected maximum pressure at sensor 2}}',
-                     r'\textrm{pressure [bar]}', group, color, offset)
+                     r'\textrm{\LARGE pressure [bar]}', group, color, offset)
 
         visualizeRow(csvData[2]/60/60, axsT[0], r'\textrm{\textbf{\Large 2: maximum mobile gaseous CO$_2$ in Box A}}',
-                     r'\textrm{time [h]}', group, color, offset)
+                     r'\textrm{\LARGE time [h]}', group, color, offset)
         visualizeRow(csvData[11]/60/60, axsT[1], r'\textrm{\textbf{\Large 5: $M(t)$ exceeds 110\% of Box C’s width}}',
-                     r'\textrm{time [h]}', group, color, offset)
+                     r'\textrm{\LARGE time [h]}', group, color, offset)
 
-        visualizeRow(1e3*csvData[3], axsA[0, 0], r'\textrm{\textbf{\Large 3a: mobile gaseous CO$_2$ in Box A at 72\,h}}',
-                     r'\textrm{mass [g]}', group, color, offset)
-        visualizeRow(1e3*csvData[4], axsA[0, 1], r'\textrm{\textbf{\Large 3b: immobile gaseous CO$_2$ in Box A at 72\,h}}',
-                     r'\textrm{mass [g]}', group, color, offset)
-        visualizeRow(1e3*csvData[5], axsA[1, 0], r'\textrm{\textbf{\Large 3c: CO$_2$ dissolved in liquid phase in Box A at 72\,h}}',
-                     r'\textrm{mass [g]}', group, color, offset)
-        visualizeRow(1e3*csvData[6], axsA[1, 1], r'\textrm{\textbf{\Large 3d: CO$_2$ in the seal facies in Box A at 72\,h}}',
-                     r'\textrm{mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[3], axsA[0, 0], r'\textrm{\textbf{\large 3a: mobile gaseous CO$_2$ in Box A at 72\,h}}',
+                     r'\textrm{\LARGE mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[4], axsA[0, 1], r'\textrm{\textbf{\large 3b: immobile gaseous CO$_2$ in Box A at 72\,h}}',
+                     r'\textrm{\LARGE mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[5], axsA[1, 0], r'\textrm{\textbf{\large 3c: CO$_2$ dissolved in liquid phase in Box A at 72\,h}}',
+                     r'\textrm{\LARGE mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[6], axsA[1, 1], r'\textrm{\textbf{\large 3d: CO$_2$ in the seal facies in Box A at 72\,h}}',
+                     r'\textrm{\LARGE mass [g]}', group, color, offset)
 
-        visualizeRow(1e3*csvData[7], axsB[0, 0], r'\textrm{\textbf{\Large 4a: mobile gaseous CO$_2$ in Box B at 72\,h}}',
-                     r'\textrm{mass [g]}', group, color, offset)
-        visualizeRow(1e3*csvData[8], axsB[0, 1], r'\textrm{\textbf{\Large 4b: immobile gaseous CO$_2$ in Box B at 72\,h}}',
-                     r'\textrm{mass [g]}', group, color, offset)
-        visualizeRow(1e3*csvData[9], axsB[1, 0], r'\textrm{\textbf{\Large 4c: CO$_2$ dissolved in liquid phase in Box B at 72\,h}}',
-                     r'\textrm{mass [g]}', group, color, offset)
-        visualizeRow(1e3*csvData[10], axsB[1, 1], r'\textrm{\textbf{\Large 4d: CO$_2$ in the seal facies in Box B at 72\,h}}',
-                     r'\textrm{mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[7], axsB[0, 0], r'\textrm{\textbf{\large 4a: mobile gaseous CO$_2$ in Box B at 72\,h}}',
+                     r'\textrm{\LARGE mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[8], axsB[0, 1], r'\textrm{\textbf{\large 4b: immobile gaseous CO$_2$ in Box B at 72\,h}}',
+                     r'\textrm{\LARGE mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[9], axsB[1, 0], r'\textrm{\textbf{\large 4c: CO$_2$ dissolved in liquid phase in Box B at 72\,h}}',
+                     r'\textrm{\LARGE mass [g]}', group, color, offset)
+        visualizeRow(1e3*csvData[10], axsB[1, 1], r'\textrm{\textbf{\large 4d: CO$_2$ in the seal facies in Box B at 72\,h}}',
+                     r'\textrm{\LARGE mass [g]}', group, color, offset)
 
         visualizeRow(1e3*csvData[12], axsS, r'\textrm{\textbf{\Large 6: total CO$_2$ mass in top seal facies in Box A at 120\,h}}',
-                     r'\textrm{mass [g]}', group, color, offset)
+                     r'\textrm{\Large mass [g]}', group, color, offset)
 
         offset = offset + 2.0
 
     axsP[0].set_ylim(1.09e0, 1.14e0)
     axsP[1].set_ylim(1.035e0, 1.065e0)
+    axsP[1].set_yticks([1.03, 1.04, 1.05, 1.06, 1.07])
     handles, labels = axsP[1].get_legend_handles_labels()
-    figP.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.08), ncol=5)
+    figP.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.11), ncol=5)
 
     axsT[0].set_ylim(3.3, 6.2)
     axsT[1].set_ylim(1.3, 35.0)
     handles, labels = axsT[1].get_legend_handles_labels()
-    figT.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.02), ncol=5)
+    figT.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.06), ncol=5)
 
     axsS.set_ylim(-0.02, 0.8)
     handles, labels = axsS.get_legend_handles_labels()
-    figS.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.1), ncol=5)
+    figS.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.14), ncol=5)
 
     axsA[0][0].set_ylim(-0.1, 3e-0)
-    axsA[0][1].set_ylim(-0.2, 5e-0)
+    axsA[0][0].set_yticks([0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0])
+    axsA[0][1].set_ylim(-0.02, 5e-1)
+    axsA[0][1].set_yticks([0.0, 0.1, 0.2, 0.3, 0.4, 0.5])
     axsA[1][0].set_ylim(-0.2, 5e-0)
+    axsA[1][0].set_yticks([0.0, 1.0, 2.0, 3.0, 4.0, 5.0])
     axsA[1][1].set_ylim(-0.05, 1e-0)
-    axsB[0][0].set_ylim(-0.02, 3e-1)
-    axsB[0][1].set_ylim(-0.002, 4e-2)
+    axsB[0][0].set_ylim(-0.02, 2.5e-1)
+    axsB[0][1].set_ylim(-0.002, 3e-2)
     axsB[1][0].set_ylim(-0.1, 2.2e-0)
     axsB[1][1].set_ylim(-0.05, 6e-1)
     handles, labels = axsA[1][1].get_legend_handles_labels()
-    figA.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.02), ncol=5)
+    figA.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=5)
     handles, labels = axsB[1][1].get_legend_handles_labels()
-    figB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.02), ncol=5)
+    figB.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, 1.05), ncol=5)
 
     figP.tight_layout()
     figP.savefig('sparse_data_pressure.pdf', bbox_inches='tight')

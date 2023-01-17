@@ -27,9 +27,12 @@ fig, axs = plt.subplots(2, 3, figsize=(9, 6))
 # The calculated distances have the unit of normalized mass times meter.
 # Multiply by 8.5, the injected mass of CO2 in g, and 100, to convert to g.cm.
 A = 850*distances[:numGroupsPlusExps, :numGroupsPlusExps]
+# set LANL distances to zero
+A[5, :] = 0
+A[:, 5] = 0
 
 meanA_exp = np.mean(A[numGroups:, :], axis=0) 
-meanA_fore = np.mean(A[:numGroups, :], axis=0) 
+meanA_fore = np.mean(A[:numGroups, :], axis=0)*9/8  # take correct avg due to missing LANL data
 
 for i in range(numGroups):
     if i == 5:
@@ -41,15 +44,21 @@ axs[0][0].scatter(meanA_exp[numGroups+2],  meanA_fore[numGroups+2], s=96, c='k',
 axs[0][0].scatter(meanA_exp[numGroups+3],  meanA_fore[numGroups+3], s=96, c='k', marker='v', label=r'\textrm{exp. run 4}')
 axs[0][0].scatter(meanA_exp[numGroups+4],  meanA_fore[numGroups+4], s=96, c='k', marker='<', label=r'\textrm{exp. run 5}')
 axs[0][0].set_title(r'\textrm{\textbf{24 h}}')
-axs[0][0].set_xlim((-0.05*850, 0.65*850))
-axs[0][0].set_ylim((0.1*850, 0.6*850))
+axs[0][0].set_xlim((0, 320))
+axs[0][0].set_ylim((60, 270))
 
 
 for k, hour, ki, kj in zip(range(1, 5), [48, 72, 96, 120], [0, 0, 1, 1], [1, 2, 0, 1]):
     A = 850*distances[k*numGroupsPlusExps:(k+1)*numGroupsPlusExps, k*numGroupsPlusExps:(k+1)*numGroupsPlusExps]
+    # set LANL distances to zero
+    A[5, :] = 0
+    A[:, 5] = 0
 
     meanA_exp = np.mean(A[numGroups:, :], axis=0) 
-    meanA_fore = np.mean(A[:numGroups, :], axis=0)*8/7 # take correct avg due to missing HW data
+    if hour > 48:
+        meanA_fore = np.mean(A[:numGroups, :], axis=0)*9/7 # take correct avg due to missing LANL and HW data
+    else:
+        meanA_fore = np.mean(A[:numGroups, :], axis=0)*9/8 # take correct avg due to missing LANL data
 
     for i in range(numGroups):
         if i == 5 or (i == 4 and hour > 48):
@@ -68,8 +77,8 @@ for k, hour, ki, kj in zip(range(1, 5), [48, 72, 96, 120], [0, 0, 1, 1], [1, 2, 
         axs[ki][kj].set_title(r'\textrm{\textbf{96 h}}')
     if hour == 120:
         axs[ki][kj].set_title(r'\textrm{\textbf{120 h}}')
-    axs[ki][kj].set_xlim((-0.05*850, 0.65*850))
-    axs[ki][kj].set_ylim((0.1*850, 0.6*850))
+    axs[ki][kj].set_xlim((0, 320))
+    axs[ki][kj].set_ylim((60, 270))
 
 axs[0][0].tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
 axs[0][1].tick_params(axis='x', which='both', bottom=False, top=False, labelbottom=False)
@@ -88,7 +97,8 @@ fig.legend(loc='lower right', bbox_to_anchor=(1.0, 0.1), ncol=2)
 fig.savefig(f"means_segmented_snapshots.pdf", bbox_inches='tight')
 
 for k, hour, ki, kj in zip(range(0, 5), [24, 48, 72, 96, 120], [0, 0, 0, 1, 1], [0, 1, 2, 0, 1]):
-    axs[ki][kj].set_xlim((-10, 150))
-    axs[ki][kj].set_ylim((100, 200))
+    axs[ki][kj].set_xlim((0, 120))
+    axs[ki][kj].set_xticks([0, 20, 40, 60, 80, 100, 120])
+    axs[ki][kj].set_ylim((70, 180))
 
 fig.savefig(f"means_segmented_snapshots_zoom.pdf", bbox_inches='tight')
