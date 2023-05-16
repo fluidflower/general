@@ -28,9 +28,9 @@ def visualizeRow(row, ax, title, ylabel, group, color, offset):
     else:
         p90_dev = row[5]
 
-    rect = mpatches.Rectangle((1+offset, p10_mean), 1, p50_mean - p10_mean, color=color, label=group, fill=False)
+    rect = mpatches.Rectangle((1+offset, p10_mean), 1, p50_mean - p10_mean, color=color, label=group, fill=False, linewidth=2)
     ax.add_patch(rect)
-    rect = mpatches.Rectangle((1+offset, p50_mean), 1, p90_mean - p50_mean, color=color, fill=False)
+    rect = mpatches.Rectangle((1+offset, p50_mean), 1, p90_mean - p50_mean, color=color, fill=False, linewidth=2)
     ax.add_patch(rect)
 
     ax.plot([1.5+offset, 1.5+offset], [p50_mean-p50_dev, p50_mean+p50_dev], linewidth=1, linestyle='dashed', color=color)
@@ -60,7 +60,7 @@ def assembleSparseData():
                  "../../stanford/sparse_data.csv",
                  "../../stuttgart/sparse_data.csv"]
     groups = ["Austin", "CSIRO", "Delft-DARSim", "Delft-DARTS", "Heriot-Watt", "LANL", "Melbourne", "Stanford", "Stuttgart"]
-    colors = ["C0", "C1", "C2", "C3", "C4", "C6", "C7", "C8", "C9"]
+    colors = ["C0", "C1", "C2", "C3", "#9932CC", "#FF1493", "C7", "C8", "C9"]
 
     font = {'family' : 'normal',
             'weight' : 'normal',
