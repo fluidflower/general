@@ -66,21 +66,18 @@ topLeftB = laserGridMMToPixels((0, 120), image.shape)
 bottomRightB = laserGridMMToPixels((110, 60), image.shape)
 drawrect(image, topLeftB, bottomRightB, colorB, 2, style='solid')
 bottomLeftCornerOfText = laserGridMMToPixels((1, 114), image.shape)
-cv2.putText(image,'Box B', bottomLeftCornerOfText, font, fontScale, colorB, thickness)
 
 colorA = (144, 238, 144)
 topLeftA = laserGridMMToPixels((110, 60), image.shape)
 bottomRightA = laserGridMMToPixels((280, 0), image.shape)
 drawrect(image, topLeftA, bottomRightA, colorA, 2, style='solid')
 bottomLeftCornerOfText = laserGridMMToPixels((111, 54), image.shape)
-cv2.putText(image,'Box A', bottomLeftCornerOfText, font, fontScale, colorA, thickness)
 
 colorC = (198, 166, 67)
 topLeftC = laserGridMMToPixels((110, 40), image.shape)
 bottomRightC = laserGridMMToPixels((260, 10), image.shape)
 drawrect(image, topLeftC, bottomRightC, colorC, 2, style='solid')
 bottomLeftCornerOfText = laserGridMMToPixels((111, 34), image.shape)
-cv2.putText(image,'Box C', bottomLeftCornerOfText, font, fontScale, colorC, thickness)
 
 colorInj = (0, 0, 255)
 injection1 = laserGridMMToPixels((90, 30), image.shape)
@@ -95,6 +92,8 @@ obs2 = laserGridMMToPixels((170, 110), image.shape)
 cv2.circle(image, obs2, 5, colorObs, 3)
 
 cv2.imwrite('temp.png', image)
-subprocess.run(["convert", "temp.png", "-font", "helvetica-bold", "-fill", "\"rgb(0, 164, 255)\"", "-pointsize", "36",
-                "-stroke", "black", "-annotate", "+15+40", "Box B", "figure_8_improved.png"])
+subprocess.run(["convert", "temp.png", "-font", "helvetica-bold", "-pointsize", "24", "-fill", "#90EE90",
+                "-stroke", "#90EE90", "-annotate", "+320+290", "Box A", "-fill", "#FFA400",
+                "-stroke", "#FFA400", "-annotate", "+10+110", "Box B", "-fill", "#43A6C6",
+                "-stroke", "#43A6C6", "-annotate", "+320+350", "Box C", "figure_8_improved.png"])
 subprocess.run(["rm", "temp.png"])

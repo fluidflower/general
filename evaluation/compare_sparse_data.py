@@ -20,8 +20,8 @@ def visualizeRow(means, stddevs, expData, ax, colors, groups, withlegend):
     else:
         ax.scatter(1.2*np.ones(len(means)), means, s=96, c=colors)
 
-    mean = expData[6]
-    dev = expData[7]
+    mean = np.mean(expData[1:6])
+    dev = np.std(expData[1:6])
 
     ax.plot([2.5, 3.5], [mean, mean], linewidth=2, color='k')
     ax.plot([3.0, 3.0], [mean - dev, mean + dev], linewidth=1, linestyle='dashed', color='k')
@@ -98,7 +98,7 @@ def compareSparseData():
     axsP[1].set_xticks([1.5, 3.0])
     axsP[1].set_xticklabels([r'\textrm{\LARGE modeling}', r'\textrm{\LARGE experiment}'])
     axsP[1].set_yticks([1.04, 1.05, 1.06, 1.07, 1.08])
-    axsP[1].legend(loc='lower right', bbox_to_anchor=(1.9, 0.0))
+    axsP[1].legend(loc='lower right', bbox_to_anchor=(1.75, 0.0))
     figP.savefig('compare_sparse_pressure.pdf', bbox_inches='tight')
 
     figT, axsT = plt.subplots(1, 2, figsize=(10, 5))
@@ -112,13 +112,14 @@ def compareSparseData():
     axsT[1].set_title(r'\textrm{\textbf{\Large 5: $M(t)$ exceeds 110\% of Box C’s width}}')
     axsT[1].set_xticks([1.5, 3.0])
     axsT[1].set_xticklabels([r'\textrm{\LARGE modeling}', r'\textrm{\LARGE experiment}'])
-    axsT[1].legend(loc='lower right', bbox_to_anchor=(1.9, 0.0))
+    axsT[1].legend(loc='lower right', bbox_to_anchor=(1.75, 0.0))
     figT.savefig('compare_sparse_time_all.pdf', bbox_inches='tight')
-    axsT[0].set_ylim((3.7, 5.3))
-    axsT[1].set_ylim((2.5, 5.0))
+    axsT[0].set_ylim((3.7, 7.5))
+    axsT[1].set_ylim((2.5, 9.7))
+    axsT[1].set_yticks([3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0])
     figT.savefig('compare_sparse_time.pdf', bbox_inches='tight')
 
-    figM, axsM = plt.subplots(1, 4, figsize=(12, 4))
+    figM, axsM = plt.subplots(1, 4, figsize=(16, 4))
     visualizeRow(1e3*means[3, :], 1e3*stddevs[3, :], 1e3*expData[3, :], axsM[0], colors, groups, False)
     axsM[0].set_ylabel(r'\textrm{\LARGE mass [g]}')
     axsM[0].set_title(r'\textrm{\textbf{\Large 3a: mobile gaseous CO$_2$}}')
@@ -137,11 +138,12 @@ def compareSparseData():
     axsM[3].set_xticks([1.5, 3.0])
     axsM[3].set_xticklabels([r'\textrm{\LARGE modeling}', r'\textrm{\LARGE experiment}'])
     axsM[3].legend(loc='upper center', bbox_to_anchor=(-1.4, 1.4), ncol=5)
-    figM.savefig('compare_sparse_mass_all.pdf', bbox_inches='tight')
     axsM[0].set_yticks([0.0, 0.5, 1.0, 1.5, 2.0])
     axsM[1].set_yticks([0.0, 1.0, 2.0, 3.0, 4.0, 5.0])
-    axsM[2].set_ylim((-0.0001, 0.0028))
-    axsM[2].set_yticks([0.0, 0.001, 0.002])
+    axsM[2].set_ylim((-0.0003, 0.0105))
+    axsM[2].ticklabel_format(axis='y', style='sci', scilimits=[0, 0])
+    axsM[2].text(0.4, 1.08e-2, r'$\times 10^{-2}$')
+    axsM[2].yaxis.offsetText.set_visible(False)
     axsM[3].set_yticks([0.0, 0.5, 1.0, 1.5, 2.0])
     figM.savefig('compare_sparse_mass.pdf', bbox_inches='tight')
 
@@ -152,8 +154,6 @@ def compareSparseData():
     axsS.set_xticks([1.5, 3.0])
     axsS.set_xticklabels([r'\textrm{\LARGE modeling}', r'\textrm{\LARGE experiment}'])
     axsS.legend(loc='lower right', bbox_to_anchor=(1.7, 0.0))
-    figS.savefig('compare_sparse_seal_all.pdf', bbox_inches='tight')
-    axsS.set_ylim((0.0, 0.7))
     figS.savefig('compare_sparse_seal.pdf', bbox_inches='tight')
 
 if __name__ == "__main__":
